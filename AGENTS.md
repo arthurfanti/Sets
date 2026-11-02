@@ -4,7 +4,7 @@
 
 ### Issue tracker
 
-Issues and specs live as markdown files under `.scratch/<feature-slug>/` (local-markdown tracker, no remote). See `docs/agents/issue-tracker.md`.
+Issues live as GitHub issues in `arthurfanti/Sets`, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
