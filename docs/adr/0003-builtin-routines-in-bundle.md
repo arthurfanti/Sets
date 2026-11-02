@@ -1,0 +1,3 @@
+# Built-in Routines ship in the bundle and seed insert-only
+
+Built-in Routines and the Exercise seed live as JSON in the repo and are compiled into the bundle by Vite. On first run they are written to IndexedDB by slug: insert if absent, never update, never resurrect a deleted row. Editing a built-in Routine forks it into a user-owned copy rather than mutating it. The alternative — fetching seed data at runtime or letting upgrades overwrite built-ins — would make seed data versionable independently but would silently destroy user edits, and buys nothing for a single-user offline app. A build test asserts every Exercise slug referenced by a built-in Routine resolves, so a broken reference fails the build instead of the session.

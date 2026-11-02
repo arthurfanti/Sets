@@ -1,0 +1,48 @@
+[
+  {
+    "slug": "rotina-a",
+    "name": "Rotina A — Peito e tríceps",
+    "exercises": [
+      { "exercise": "supino-reto", "sets": 4, "reps": "6-10" },
+      { "exercise": "supino-inclinado", "sets": 3, "reps": "8-12" },
+      { "exercise": "crucifixo", "sets": 3, "reps": "10-15" },
+      { "exercise": "triceps-na-polia", "sets": 3, "reps": "10-15" },
+      { "exercise": "triceps-testa", "sets": 3, "reps": "8-12" }
+    ]
+  },
+  {
+    "slug": "rotina-b",
+    "name": "Rotina B — Costas e bíceps",
+    "exercises": [
+      { "exercise": "puxada-frontal", "sets": 4, "reps": "8-12" },
+      { "exercise": "remada-curvada", "sets": 4, "reps": "6-10" },
+      { "exercise": "remada-baixa", "sets": 3, "reps": "10-12" },
+      { "exercise": "rosca-direta", "sets": 3, "reps": "8-12" },
+      { "exercise": "rosca-martelo", "sets": 3, "reps": "10-12" }
+    ]
+  },
+  {
+    "slug": "rotina-c",
+    "name": "Rotina C — Pernas",
+    "exercises": [
+      { "exercise": "agachamento-livre", "sets": 4, "reps": "6-10" },
+      { "exercise": "leg-press", "sets": 4, "reps": "8-12" },
+      { "exercise": "levantamento-terra-romeno", "sets": 3, "reps": "8-12" },
+      { "exercise": "cadeira-extensora", "sets": 3, "reps": "10-15" },
+      { "exercise": "mesa-flexora", "sets": 3, "reps": "10-15" },
+      { "exercise": "panturrilha-em-pe", "sets": 4, "reps": "12-20" }
+    ]
+  },
+  {
+    "slug": "rotina-d",
+    "name": "Rotina D — Ombros e abdômen",
+    "exercises": [
+      { "exercise": "desenvolvimento-militar", "sets": 4, "reps": "6-10" },
+      { "exercise": "elevacao-lateral", "sets": 4, "reps": "12-15" },
+      { "exercise": "elevacao-posterior", "sets": 3, "reps": "12-15" },
+      { "exercise": "encolhimento", "sets": 3, "reps": "10-15" },
+      { "exercise": "abdominal-supra", "sets": 3, "reps": "15-20" },
+      { "exercise": "abdominal-infra", "sets": 3, "reps": "10-15" }
+    ]
+  }
+]

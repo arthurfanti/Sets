@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Paleta — candidata v1</title>
+<style>
+  :root{
+    --bg:#0B0D10; --s1:#14171C; --s2:#1D222A;
+    --border:rgba(255,255,255,.08);
+    --text:#EDEFF2; --muted:#8A919B;
+    --purple:#B26BFF; --magenta:#F72585;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+       font-family:-apple-system,system-ui,sans-serif;
+       font-variant-numeric:tabular-nums;padding:24px;line-height:1.45}
+  h1{font-size:20px;margin:0 0 4px;font-weight:600}
+  p.sub{margin:0 0 24px;color:var(--muted);font-size:13px}
+  h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:28px 0 10px;font-weight:600}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .sw{flex:1 1 140px;border-radius:10px;padding:14px;border:1px solid var(--border);min-height:78px;
+      display:flex;flex-direction:column;justify-content:flex-end}
+  .sw b{font-size:13px;font-weight:600}
+  .sw code{font-size:11px;opacity:.75;font-family:ui-monospace,monospace}
+  .on-bg{border:1px solid var(--border)}
+  .table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .table td,.table th{text-align:left;padding:7px 8px;border-bottom:1px solid var(--border)}
+  .table th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  .pass{color:#7DE38B}.fail{color:#FF6B6B}
+  /* mock: linha de série */
+  .setrow{display:flex;align-items:center;gap:12px;background:var(--s1);border:1px solid var(--border);
+          border-left:3px solid var(--purple);border-radius:10px;padding:14px 16px;max-width:420px}
+  .setrow .idx{color:var(--muted);font-size:13px;width:18px}
+  .setrow .val{font-size:26px;font-weight:600}
+  .setrow .unit{font-size:13px;color:var(--muted);margin-left:2px}
+  .setrow .done{margin-left:auto;width:48px;height:48px;border-radius:12px;
+                background:var(--purple);color:#0B0D10;display:grid;place-items:center;font-weight:700;font-size:20px}
+  .btn{display:inline-block;background:var(--purple);color:#0B0D10;font-weight:600;
+       padding:16px 22px;border-radius:12px;font-size:15px}
+  svg{display:block;background:var(--s1);border:1px solid var(--border);border-radius:10px;max-width:420px;width:100%}
+  .legend{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+  <h1>Séries — paleta candidata</h1>
+  <p class="sub">Fundo escuro fixo, um acento de interação, um acento de dado. Números sempre em texto claro, nunca na cor de acento.</p>
+
+  <h2>Superfícies</h2>
+  <div class="row">
+    <div class="sw on-bg" style="background:var(--bg)"><b>fundo</b><code>#0B0D10</code></div>
+    <div class="sw" style="background:var(--s1)"><b>superfície 1</b><code>#14171C</code></div>
+    <div class="sw" style="background:var(--s2)"><b>superfície 2</b><code>#1D222A</code></div>
+    <div class="sw" style="background:var(--bg);border-color:var(--border)"><b>borda</b><code>#fff @ 8%</code></div>
+  </div>
+
+  <h2>Texto</h2>
+  <div class="row">
+    <div class="sw" style="background:var(--s1);color:var(--text)"><b>texto</b><code>#EDEFF2 · 16,9:1</code></div>
+    <div class="sw" style="background:var(--s1);color:var(--muted)"><b>texto secundário</b><code>#8A919B · 5,6:1</code></div>
+  </div>
+
+  <h2>Acentos</h2>
+  <div class="row">
+    <div class="sw" style="background:var(--purple);color:#0B0D10"><b>violeta — interação</b><code>#B26BFF</code></div>
+    <div class="sw" style="background:var(--magenta);color:#0B0D10"><b>magenta — dado</b><code>#F72585</code></div>
+  </div>
+
+  <h2>Contraste medido</h2>
+  <table class="table">
+    <tr><th>cor</th><th>sobre fundo</th><th>sobre superfície 2</th><th>pode carregar texto?</th></tr>
+    <tr><td>texto #EDEFF2</td><td class="pass">16,89</td><td class="pass">13,87</td><td class="pass">sim — números a 7:1</td></tr>
+    <tr><td>secundário #8A919B</td><td class="pass">6,12</td><td class="pass">5,02</td><td class="pass">sim — rótulos</td></tr>
+    <tr><td>violeta #B26BFF</td><td class="pass">5,97</td><td class="pass">4,90</td><td class="pass">sim — AA em ambas as superfícies</td></tr>
+    <tr><td>magenta #F72585</td><td class="pass">5,15</td><td class="pass">4,23</td><td class="fail">não sobre superfície 2 — só gráfico</td></tr>
+    <tr><td>violeta vivo #A855F7</td><td class="pass">4,92</td><td class="fail">4,04</td><td class="fail">não — reprova AA na superfície 2</td></tr>
+  </table>
+
+  <h2>Como o acento aparece</h2>
+  <div class="setrow">
+    <span class="idx">2</span>
+    <span class="val">100<span class="unit">kg</span></span>
+    <span class="val" style="margin-left:8px">×8</span>
+    <span class="done">✓</span>
+  </div>
+  <p class="legend">O violeta marca a série em andamento como barra e como botão. Os números continuam em #EDEFF2, a 16,9:1.</p>
+
+  <div style="height:16px"></div>
+  <span class="btn">Iniciar rotina</span>
+  <p class="legend">Rótulo em #0B0D10 sobre violeta: 5,97:1 — passa AA, e não precisa de 7:1 porque não é um peso.</p>
+
+  <h2>O magenta só no gráfico</h2>
+  <svg viewBox="0 0 400 120" height="120" aria-label="exemplo de linha de 1RM">
+    <polyline fill="none" stroke="#F72585" stroke-width="2.5" stroke-linecap="round"
+      points="16,96 76,88 136,74 196,80 256,58 316,44 376,30"/>
+    <circle cx="316" cy="44" r="4.5" fill="#F72585"/>
+    <circle cx="376" cy="30" r="4.5" fill="#F72585"/>
+  </svg>
+  <p class="legend">Linha de 1RM estimado e marcador de melhor série — 5,15:1 sobre fundo, acima do mínimo de 3:1 para elementos gráficos.</p>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Local-first, single user, no backend
+
+The app is for one lifter, whose training history lives on their own device (IndexedDB), with no accounts, no server, and no sync. v1 also ships no export or import: the JSON seed feeds built-in content at build time and is never a user-facing file format. The alternative — accounts and a backend — buys cross-device sync at the cost of auth, hosting, and a much larger build; for a personal strength log the phone is the only device that matters. Accepted consequence: there is **no backup path in v1**, so losing the phone or the browser evicting storage loses the entire history. Reversing this later means adding a sync layer and identity, which is why it is recorded.
+
+Known eviction paths, recorded so 13 can answer them: deleting the Home Screen icon destroys that app's data store outright; quota and system storage pressure can evict any origin even in persistent mode; and WebKit's seven-day cap on script-writable storage applies to the site in a Safari tab, though not to an installed Home Screen web app.

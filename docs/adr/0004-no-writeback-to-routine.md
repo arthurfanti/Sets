@@ -1,0 +1,3 @@
+# Session deviations never write back to the Routine
+
+When a Session departs from its Routine — a skipped Set, an added Exercise, a heavier weight — the change is recorded in that Session only. The Routine is unchanged until the Lifter edits it explicitly. The tempting alternative is to let the next Session pre-fill from the last performance *and* promote that into the Routine, which is fewer taps but silently rewrites a training plan; a program is the one thing in this app the Lifter expects to be stable. Consequence: improving a Routine is a deliberate edit, and "last time" is used only as a pre-fill for weights, never as a source of truth for the plan.
