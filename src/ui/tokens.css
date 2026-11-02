@@ -1,5 +1,6 @@
-/* Design tokens. Every colour, size and duration in the app comes from here —
-   components never repeat a literal value. */
+/* Colours, spacing, shape, targets and type sizes come from here. A component
+   may still hardcode a border width or a font weight where DESIGN.md names no
+   role for it — those are the exceptions, not the rule. */
 
 :root {
   /* Surfaces */
@@ -11,7 +12,6 @@
   /* Text */
   --text: #edeff2;
   --text-muted: #8a919b;
-  --text-on-accent: #0b0d10;
 
   /* Accents: violet is interaction only, magenta is data only. */
   --accent-interaction: #b26bff;

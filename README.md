@@ -18,7 +18,9 @@ npm run dev
 | `npm run preview` | Serve the built output |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | Biome check (format + lint) |
+| `npm run format` | Biome check, writing fixes |
 | `npm run test` | Vitest, one run |
+| `npm run test:watch` | Vitest, watching |
 
 ## Shape
 

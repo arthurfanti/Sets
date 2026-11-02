@@ -27,7 +27,7 @@ _pt-BR_: Minha rotina
 _Avoid_: Custom routine, my routine, copy, rotina personalizada
 
 **Session**:
-One dated instance of training, started from a Routine. It copies that Routine's prescription as its plan and records the Sets actually performed against it.
+One dated instance of training. It is normally started from a Routine and copies that Routine's prescription as its Plan; an empty Session started from no Routine has no Plan. It records the Sets actually performed.
 _pt-BR_: Sessão
 _Avoid_: Workout, training day, log entry, treino, dia de treino
 

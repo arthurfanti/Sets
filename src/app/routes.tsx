@@ -9,11 +9,14 @@ import { SessionScreen } from "@/ui/screens/SessionScreen";
  * The five routes. Hash routing is deliberate: it exists so the phone's back
  * gesture returns to the previous screen instead of leaving the app, and it
  * keeps the deploy free of any server-side rewrite rule.
+ *
+ * Route params are `:id` — a routine or exercise id is a slug for seed rows and
+ * a prefixed UUID for rows the lifter created, so "slug" would be a lie.
  */
 export const routes: RouteObject[] = [
   { path: "/", element: <HomeScreen /> },
   { path: "/sessao/:id", element: <SessionScreen /> },
-  { path: "/rotina/:slug", element: <RoutineEditorScreen /> },
+  { path: "/rotina/:id", element: <RoutineEditorScreen /> },
   { path: "/historico", element: <HistoryScreen /> },
-  { path: "/exercicio/:slug", element: <ExerciseScreen /> },
+  { path: "/exercicio/:id", element: <ExerciseScreen /> },
 ];
