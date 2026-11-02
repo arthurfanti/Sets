@@ -1,0 +1,49 @@
+/* Design tokens. Every colour, size and duration in the app comes from here —
+   components never repeat a literal value. */
+
+:root {
+  /* Surfaces */
+  --bg: #0b0d10;
+  --surface-1: #14171c;
+  --surface-2: #1d222a;
+  --border: rgb(255 255 255 / 8%);
+
+  /* Text */
+  --text: #edeff2;
+  --text-muted: #8a919b;
+  --text-on-accent: #0b0d10;
+
+  /* Accents: violet is interaction only, magenta is data only. */
+  --accent-interaction: #b26bff;
+  --accent-data: #f72585;
+
+  /* Spacing: 4 / 8 / 12 / 16 / 24 / 32 */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Shape */
+  --radius: 12px;
+  --radius-sm: 8px;
+  --target: 48px;
+  --action-height: 56px;
+
+  /* Type */
+  --font-sans: -apple-system, system-ui, "Segoe UI", roboto, sans-serif;
+  --text-title: 20px;
+  --text-body: 15px;
+  --text-meta: 13px;
+  --text-hero: 32px;
+
+  /* Motion */
+  --motion: 140ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion: 0ms;
+  }
+}
