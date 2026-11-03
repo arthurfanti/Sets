@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { countSessions, listExercises, listRoutines } from "@/db/repositories";
 import type { Exercise, Routine } from "@/domain";
 import { Placeholder } from "@/ui/Placeholder";
@@ -65,6 +66,10 @@ export function HomeScreen() {
         nameOf={nameOf}
         emptyText="Nenhuma rotina sua ainda."
       />
+
+      <Link to="/rotina/nova" className={styles.primary}>
+        Nova rotina
+      </Link>
     </Placeholder>
   );
 }
@@ -96,8 +101,17 @@ function RoutineGroup({ title, routines, nameOf, emptyText }: RoutineGroupProps)
 
             return (
               <li key={routine.id} className={styles.row}>
-                <span className={styles.name}>{routine.name}</span>
-                {summary ? <span className={styles.summary}>{summary}</span> : null}
+                <div className={styles.rowText}>
+                  <span className={styles.name}>{routine.name}</span>
+                  {summary ? <span className={styles.summary}>{summary}</span> : null}
+                </div>
+                <Link
+                  to={`/rotina/${routine.id}`}
+                  className={styles.edit}
+                  aria-label={`Editar ${routine.name}`}
+                >
+                  Editar
+                </Link>
               </li>
             );
           })}

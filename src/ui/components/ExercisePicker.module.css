@@ -1,0 +1,110 @@
+.stack {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.search {
+  width: 100%;
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-row);
+}
+
+.search:focus-visible,
+.pick:focus-visible,
+.more:focus-visible,
+.create:focus-visible,
+.action:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.create {
+  width: 100%;
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  background: var(--surface-1);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: var(--text-body);
+  text-align: left;
+}
+
+.group {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.groupTitle {
+  position: sticky;
+  top: calc(-1 * var(--space-4));
+  z-index: 1;
+  margin: 0;
+  padding: var(--space-2) 0;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.pick {
+  flex: 1;
+  min-height: var(--target);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: var(--text-row);
+  font-weight: 600;
+  text-align: left;
+}
+
+.more {
+  flex: none;
+  width: var(--target);
+  height: var(--target);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: var(--text-body);
+}
+
+.action {
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: var(--text-body);
+  text-align: left;
+}

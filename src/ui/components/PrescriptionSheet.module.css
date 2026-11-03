@@ -1,0 +1,44 @@
+.stack {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.move {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.moveButton {
+  min-height: var(--target);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: var(--text-body);
+}
+
+.moveButton:disabled {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.moveButton:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.primary {
+  width: 100%;
+  min-height: var(--action-height);
+  background: var(--accent-interaction);
+  border: none;
+  border-radius: var(--radius);
+  color: var(--bg);
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}

@@ -20,8 +20,10 @@
 }
 
 .row {
-  display: grid;
-  gap: var(--space-1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   min-height: var(--target);
   padding: var(--space-3) var(--space-4);
   background: var(--surface-1);
@@ -52,4 +54,50 @@
   margin: 0 0 var(--space-5);
   color: var(--text-muted);
   font-size: var(--text-meta);
+}
+
+.rowText {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.edit {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding-inline: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  text-decoration: none;
+}
+
+.edit:hover {
+  color: var(--text);
+}
+
+.edit:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--action-height);
+  margin-top: var(--space-2);
+  background: var(--accent-interaction);
+  border-radius: var(--radius);
+  color: var(--bg);
+  font-size: var(--text-body);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
 }

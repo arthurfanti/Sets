@@ -5,7 +5,7 @@ import type { Exercise, Routine } from "@/domain";
 let ready: Promise<SetsDb> | undefined;
 
 /** Opens the database once and seeds it, then reuses the handle for the session. */
-function defaultDatabase(): Promise<SetsDb> {
+export function defaultDatabase(): Promise<SetsDb> {
   ready ??= (async () => {
     const database = await openDatabase();
     await seedDatabase(database);

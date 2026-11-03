@@ -1,0 +1,126 @@
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.input {
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-row);
+}
+
+.input:focus-visible,
+.chip:focus-visible,
+.useExisting:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.groups {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.groups .label {
+  padding: 0;
+}
+
+.hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.chip {
+  min-height: var(--target);
+  padding: 0 var(--space-2);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-meta);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--surface-2);
+  border-color: var(--accent-interaction);
+}
+
+.blocked {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.blockedText {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-body);
+}
+
+.useExisting {
+  min-height: var(--target);
+  padding: 0 var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: var(--text-body);
+  text-align: left;
+}
+
+.warning {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.primary {
+  width: 100%;
+  min-height: var(--action-height);
+  background: var(--accent-interaction);
+  border: none;
+  border-radius: var(--radius);
+  color: var(--bg);
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.primary:disabled {
+  opacity: 0.4;
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}

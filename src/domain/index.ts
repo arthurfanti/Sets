@@ -33,6 +33,11 @@ export interface Exercise {
   /** Seeded short forms, matched by search and never displayed. */
   aliases?: string[];
   source: Source;
+  /**
+   * When the Lifter hid this Exercise. Hidden rows leave the picker but stay
+   * resolvable, because the Sets that named them still have to render.
+   */
+  hiddenAt?: number;
 }
 
 /** One Exercise in a Routine, with what it prescribes. */
