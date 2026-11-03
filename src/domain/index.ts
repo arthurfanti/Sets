@@ -9,16 +9,19 @@
  * vocabulary, not a wish list.
  */
 
-export type MuscleGroup =
-  | "Peito"
-  | "Costas"
-  | "Ombros"
-  | "Quadríceps"
-  | "Posteriores"
-  | "Panturrilha"
-  | "Bíceps"
-  | "Tríceps"
-  | "Abdômen";
+export const MUSCLE_GROUPS = [
+  "Peito",
+  "Costas",
+  "Ombros",
+  "Quadríceps",
+  "Posteriores",
+  "Panturrilha",
+  "Bíceps",
+  "Tríceps",
+  "Abdômen",
+] as const;
+
+export type MuscleGroup = (typeof MUSCLE_GROUPS)[number];
 
 export type Source = "builtin" | "user";
 
