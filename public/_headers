@@ -1,0 +1,19 @@
+# Vite hashes everything under /assets, so it can be cached forever.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# These three cannot be hashed: the browser re-fetches /sw.js by exact URL to
+# detect an update, and index.html is the only unhashed file that points at the
+# hashed bundle. Caching any of them for long serves a stale app forever.
+/sw.js
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+/manifest.webmanifest
+  Cache-Control: no-cache
+
+# Icons are content-stable; a day is enough to let a new one land.
+/icons/*
+  Cache-Control: public, max-age=86400

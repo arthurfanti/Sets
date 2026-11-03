@@ -21,6 +21,10 @@ npm run dev
 | `npm run format` | Biome check, writing fixes |
 | `npm run test` | Vitest, one run |
 | `npm run test:watch` | Vitest, watching |
+| `npm run icons` | Regenerate the app icons from `assets/icon.svg` |
+| `npm run deploy` | Build, then deploy to Cloudflare Pages |
+
+Live at <https://sets-40e.pages.dev>. On iOS, open it in Safari and use **Add to Home Screen** — installing is what exempts the data from Safari's seven-day storage cap.
 
 ## Shape
 
