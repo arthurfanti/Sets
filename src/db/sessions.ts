@@ -1,5 +1,6 @@
 import { readyDatabase, type SetsDb } from "@/db/database";
 import type { PerformedSet, Prescription, Session } from "@/domain";
+import { lastActivityAt } from "@/domain/session";
 
 /**
  * Session persistence. A Session is one document: its Plan and every Set it
@@ -91,11 +92,33 @@ export async function startSession(routineId: string, database?: SetsDb): Promis
   const routine = await db.get("routines", routineId);
   if (!routine) throw new MissingRoutineError(routineId);
 
+  const plan = routine.prescriptions.map((prescription): Prescription => ({ ...prescription }));
+  return createSession(db, routineId, plan);
+}
+
+/**
+ * Starts an empty Session: no Routine and no Plan, so it can only record Sets
+ * the Lifter adds. One active Session at a time still holds.
+ */
+export async function startEmptySession(database?: SetsDb): Promise<Session> {
+  const db = database ?? (await readyDatabase());
+  return createSession(db, null, []);
+}
+
+/**
+ * Inserts a new open Session, refusing when one is already open. `startedAt` is
+ * set once, here, and nothing rewrites it afterwards.
+ */
+async function createSession(
+  db: SetsDb,
+  routineId: string | null,
+  plan: Prescription[],
+): Promise<Session> {
   const session: Session = {
     id: `ses_${crypto.randomUUID()}`,
     routineId,
     startedAt: Date.now(),
-    plan: routine.prescriptions.map((prescription): Prescription => ({ ...prescription })),
+    plan,
     sets: [],
   };
 
@@ -183,6 +206,32 @@ export async function addExerciseToSession(
   await tx.objectStore("sessions").put(updated);
   await tx.done;
   return updated;
+}
+
+/**
+ * Closes the Session where the Lifter last worked: at the last logged Set, not
+ * at the moment Finish was tapped, so a Session resumed after an overnight gap
+ * never bills the gap as training time. An empty Session ends where it started
+ * and so records duration 0. The Routine is untouched (ADR 0004), and an
+ * ending that is already recorded is never moved.
+ */
+export async function finishSession(sessionId: string, database?: SetsDb): Promise<Session> {
+  const db = database ?? (await readyDatabase());
+  const tx = db.transaction("sessions", "readwrite");
+  const session = await tx.store.get(sessionId);
+  if (!session) {
+    abort(tx);
+    throw new MissingSessionError(sessionId);
+  }
+  if (session.endedAt !== undefined) {
+    await tx.done;
+    return readSession(session);
+  }
+
+  const updated: Session = { ...session, endedAt: lastActivityAt(session) };
+  await tx.store.put(updated);
+  await tx.done;
+  return readSession(updated);
 }
 
 /** Removes an open Session the Lifter chose to discard. */
