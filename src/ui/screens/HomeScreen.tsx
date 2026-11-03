@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { countSessions, listExercises, listRoutines } from "@/db/repositories";
-import type { Exercise, Routine } from "@/domain";
+import { findActiveSession } from "@/db/sessions";
+import type { Routine, Session } from "@/domain";
 import { Placeholder } from "@/ui/Placeholder";
 import styles from "./HomeScreen.module.css";
 
@@ -8,6 +10,7 @@ interface HomeData {
   routines: Routine[];
   exerciseNames: Map<string, string>;
   sessionCount: number;
+  activeSession: Session | undefined;
 }
 
 export function HomeScreen() {
@@ -16,13 +19,14 @@ export function HomeScreen() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([listRoutines(), listExercises(), countSessions()])
-      .then(([routines, exercises, sessionCount]: [Routine[], Exercise[], number]) => {
+    Promise.all([listRoutines(), listExercises(), countSessions(), findActiveSession()])
+      .then(([routines, exercises, sessionCount, activeSession]) => {
         if (cancelled) return;
         setData({
           routines,
           exerciseNames: new Map(exercises.map((exercise) => [exercise.id, exercise.name])),
           sessionCount,
+          activeSession,
         });
       })
       .catch(() => {
@@ -49,6 +53,13 @@ export function HomeScreen() {
 
   return (
     <Placeholder title="Rotinas">
+      {data.activeSession ? (
+        <Link className={styles.resume} to={`/sessao/${data.activeSession.id}`}>
+          <span className={styles.resumeLabel}>Sessão em andamento</span>
+          <span className={styles.resumeAction}>Continuar</span>
+        </Link>
+      ) : null}
+
       {data.sessionCount === 0 ? (
         <p className={styles.hint}>Nenhuma sessão ainda. Escolha uma rotina para começar.</p>
       ) : null}
@@ -95,9 +106,11 @@ function RoutineGroup({ title, routines, nameOf, emptyText }: RoutineGroupProps)
               .join(" · ");
 
             return (
-              <li key={routine.id} className={styles.row}>
-                <span className={styles.name}>{routine.name}</span>
-                {summary ? <span className={styles.summary}>{summary}</span> : null}
+              <li key={routine.id}>
+                <Link className={styles.row} to={`/sessao/${routine.id}`}>
+                  <span className={styles.name}>{routine.name}</span>
+                  {summary ? <span className={styles.summary}>{summary}</span> : null}
+                </Link>
               </li>
             );
           })}

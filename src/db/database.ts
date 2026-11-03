@@ -17,6 +17,21 @@ export interface SetsDatabase extends DBSchema {
 
 export type SetsDb = IDBPDatabase<SetsDatabase>;
 
+let ready: Promise<SetsDb> | undefined;
+
+/**
+ * The one connection the app uses: opened and seeded on first call, then
+ * reused. Tests bypass this and pass their own database into the repositories.
+ */
+export function readyDatabase(): Promise<SetsDb> {
+  ready ??= (async () => {
+    const database = await openDatabase();
+    await seedDatabase(database);
+    return database;
+  })();
+  return ready;
+}
+
 interface SeedExercise {
   slug: string;
   name: string;

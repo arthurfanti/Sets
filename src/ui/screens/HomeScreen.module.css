@@ -27,6 +27,13 @@
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  color: inherit;
+  text-decoration: none;
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
 }
 
 .name {
@@ -50,6 +57,35 @@
 
 .hint {
   margin: 0 0 var(--space-5);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.resume {
+  display: flex;
+  min-height: var(--target);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--accent-interaction);
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.resume:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.resumeLabel {
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.resumeAction {
   color: var(--text-muted);
   font-size: var(--text-meta);
 }
