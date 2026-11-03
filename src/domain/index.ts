@@ -30,6 +30,8 @@ export interface Exercise {
   id: string;
   name: string;
   muscleGroup: MuscleGroup;
+  /** Seeded short forms, matched by search and never displayed. */
+  aliases?: string[];
   source: Source;
 }
 

@@ -38,6 +38,17 @@ describe("seeding", () => {
     db.close();
   });
 
+  it("keeps the seeded aliases, which the picker searches but never displays", async () => {
+    const db = await openDatabase(dbName);
+    await seedDatabase(db, 1);
+
+    const seeded = exerciseSeed.find((exercise) => exercise.aliases?.length);
+    if (!seeded) throw new Error("seed has no aliases to check");
+
+    expect((await db.get("exercises", seeded.slug))?.aliases).toEqual(seeded.aliases);
+    db.close();
+  });
+
   it("does not duplicate rows when seeding runs again", async () => {
     const db = await openDatabase(dbName);
     await seedDatabase(db, 1);

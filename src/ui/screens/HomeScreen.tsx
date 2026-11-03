@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listExercises, listRoutines } from "@/db/repositories";
+import { countSessions, listExercises, listRoutines } from "@/db/repositories";
 import type { Exercise, Routine } from "@/domain";
 import { Placeholder } from "@/ui/Placeholder";
 import styles from "./HomeScreen.module.css";
@@ -7,6 +7,7 @@ import styles from "./HomeScreen.module.css";
 interface HomeData {
   routines: Routine[];
   exerciseNames: Map<string, string>;
+  sessionCount: number;
 }
 
 export function HomeScreen() {
@@ -15,12 +16,13 @@ export function HomeScreen() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([listRoutines(), listExercises()])
-      .then(([routines, exercises]: [Routine[], Exercise[]]) => {
+    Promise.all([listRoutines(), listExercises(), countSessions()])
+      .then(([routines, exercises, sessionCount]: [Routine[], Exercise[], number]) => {
         if (cancelled) return;
         setData({
           routines,
           exerciseNames: new Map(exercises.map((exercise) => [exercise.id, exercise.name])),
+          sessionCount,
         });
       })
       .catch(() => {
@@ -31,54 +33,76 @@ export function HomeScreen() {
     };
   }, []);
 
-  const builtIn = data?.routines.filter((routine) => routine.source === "builtin") ?? [];
-  const mine = data?.routines.filter((routine) => routine.source === "user") ?? [];
+  if (failed) {
+    return (
+      <Placeholder title="Rotinas">
+        <p className={styles.empty}>Não foi possível carregar as rotinas.</p>
+      </Placeholder>
+    );
+  }
 
-  const summaryFor = (routine: Routine): string =>
-    routine.prescriptions
-      .map((prescription) => data?.exerciseNames.get(prescription.exerciseId))
-      .filter((name): name is string => Boolean(name))
-      .join(" · ");
+  if (data === null) {
+    return <Placeholder title="Rotinas">{null}</Placeholder>;
+  }
+
+  const nameOf = (exerciseId: string) => data.exerciseNames.get(exerciseId);
 
   return (
     <Placeholder title="Rotinas">
-      {failed ? <p className={styles.empty}>Não foi possível carregar as rotinas.</p> : null}
-
-      {builtIn.length > 0 ? (
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Rotinas prontas</h2>
-          <ul className={styles.list}>
-            {builtIn.map((routine) => (
-              <li key={routine.id} className={styles.row}>
-                <span className={styles.name}>{routine.name}</span>
-                <Summary text={summaryFor(routine)} />
-              </li>
-            ))}
-          </ul>
-        </section>
+      {data.sessionCount === 0 ? (
+        <p className={styles.hint}>Nenhuma sessão ainda. Escolha uma rotina para começar.</p>
       ) : null}
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Minhas rotinas</h2>
-        {mine.length === 0 ? (
-          <p className={styles.empty}>Nenhuma rotina sua ainda.</p>
-        ) : (
-          <ul className={styles.list}>
-            {mine.map((routine) => (
-              <li key={routine.id} className={styles.row}>
-                <span className={styles.name}>{routine.name}</span>
-                <Summary text={summaryFor(routine)} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <RoutineGroup
+        title="Rotinas prontas"
+        routines={data.routines.filter((routine) => routine.source === "builtin")}
+        nameOf={nameOf}
+      />
+
+      <RoutineGroup
+        title="Minhas rotinas"
+        routines={data.routines.filter((routine) => routine.source === "user")}
+        nameOf={nameOf}
+        emptyText="Nenhuma rotina sua ainda."
+      />
     </Placeholder>
   );
 }
 
-/** A Routine whose Exercises all failed to resolve renders no summary line
- *  rather than a dangling separator. */
-function Summary({ text }: { text: string }) {
-  return text ? <span className={styles.summary}>{text}</span> : null;
+interface RoutineGroupProps {
+  title: string;
+  routines: Routine[];
+  nameOf: (exerciseId: string) => string | undefined;
+  emptyText?: string;
+}
+
+function RoutineGroup({ title, routines, nameOf, emptyText }: RoutineGroupProps) {
+  if (routines.length === 0 && !emptyText) return null;
+
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.sectionTitle}>{title}</h2>
+      {routines.length === 0 ? (
+        <p className={styles.empty}>{emptyText}</p>
+      ) : (
+        <ul className={styles.list}>
+          {routines.map((routine) => {
+            // A Routine whose Exercises do not resolve renders no summary line,
+            // rather than a dangling separator.
+            const summary = routine.prescriptions
+              .map((prescription) => nameOf(prescription.exerciseId))
+              .filter((name): name is string => Boolean(name))
+              .join(" · ");
+
+            return (
+              <li key={routine.id} className={styles.row}>
+                <span className={styles.name}>{routine.name}</span>
+                {summary ? <span className={styles.summary}>{summary}</span> : null}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
+  );
 }

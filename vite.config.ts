@@ -15,7 +15,7 @@ export default defineConfig({
       manifest: {
         name: "Sets",
         short_name: "Sets",
-        description: "Registro pessoal de treino de força.",
+        description: "Diário de séries, cargas e progresso.",
         lang: "pt-BR",
         start_url: "/",
         scope: "/",

@@ -34,8 +34,10 @@
   /* Type */
   --font-sans: -apple-system, system-ui, "Segoe UI", roboto, sans-serif;
   --text-title: 20px;
+  --text-row: 17px;
   --text-body: 15px;
   --text-meta: 13px;
+  --text-label: 12px;
   --text-hero: 32px;
 
   /* Motion */

@@ -54,12 +54,14 @@ export async function openDatabase(name: string = DATABASE_NAME): Promise<SetsDb
 }
 
 function toExercise(row: SeedExercise): Exercise {
-  return {
+  const exercise: Exercise = {
     id: row.slug,
     name: row.name,
     muscleGroup: row.muscleGroup as MuscleGroup,
     source: "builtin",
   };
+  if (row.aliases && row.aliases.length > 0) exercise.aliases = row.aliases;
+  return exercise;
 }
 
 function toRoutine(row: SeedRoutine): Routine {
