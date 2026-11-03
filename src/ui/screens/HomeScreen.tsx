@@ -76,6 +76,10 @@ export function HomeScreen() {
         nameOf={nameOf}
         emptyText="Nenhuma rotina sua ainda."
       />
+
+      <Link to="/sobre" className={styles.about}>
+        Sobre
+      </Link>
     </Placeholder>
   );
 }

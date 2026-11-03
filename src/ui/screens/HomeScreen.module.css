@@ -89,3 +89,12 @@
   color: var(--text-muted);
   font-size: var(--text-meta);
 }
+
+.about {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  text-decoration: none;
+}

@@ -2,6 +2,14 @@ import routineSeed from "@/data/routines.json";
 import { readyDatabase, type SetsDb } from "@/db/database";
 import type { Exercise, Routine } from "@/domain";
 
+/**
+ * The session-wide handle, seeded. Storage reads and the one destructive clear
+ * go through it too, so About never sees a connection that skipped the seed.
+ */
+export function getDatabase(): Promise<SetsDb> {
+  return readyDatabase();
+}
+
 /** Built-in Routines keep the order the bundle declares them in. */
 const builtInOrder = new Map(
   (routineSeed as { slug: string }[]).map((row, index) => [row.slug, index]),

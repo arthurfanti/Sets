@@ -8,13 +8,14 @@ import { routes } from "@/app/routes";
  * exists.
  */
 describe("route table", () => {
-  it("exposes the five documented paths, in order", () => {
+  it("exposes the six documented paths, in order", () => {
     expect(routes.map((route) => route.path)).toEqual([
       "/",
       "/sessao/:id",
       "/rotina/:id",
       "/historico",
       "/exercicio/:id",
+      "/sobre",
     ]);
   });
 
