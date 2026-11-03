@@ -1,18 +1,23 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
 import { openDatabase, type SetsDb, seedDatabase } from "@/db/database";
+import { createExercise, hideExercise, listSelectableExercises } from "@/db/exercises";
+import { listExercises } from "@/db/repositories";
 import {
   ActiveSessionError,
   addExerciseToSession,
   appendSet,
+  deleteFinishedSession,
   discardSession,
   findActiveSession,
   finishSession,
   getSession,
   listFinishedSessions,
   MissingSessionError,
+  MissingSetError,
   startEmptySession,
   startSession,
+  updateSet,
 } from "@/db/sessions";
 import type { Routine, Session } from "@/domain";
 
@@ -303,5 +308,122 @@ describe("finishSession", () => {
 
   it("refuses a Session that does not exist", async () => {
     await expect(finishSession("ses_ausente", db)).rejects.toBeInstanceOf(MissingSessionError);
+  });
+});
+
+describe("updateSet", () => {
+  async function finishedSessionWithOneSet(): Promise<Session> {
+    const session = await startSession(routine.id, db);
+    await appendSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 0, weight: 100, reps: 8, confirmedAt: 1_000 },
+      db,
+    );
+    await appendSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 1, weight: 100, reps: 7, confirmedAt: 2_000 },
+      db,
+    );
+    return finishSession(session.id, db);
+  }
+
+  it("corrects the weight and reps, and the correction survives a reload", async () => {
+    const session = await finishedSessionWithOneSet();
+
+    await updateSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 0, weight: 102.5, reps: 6 },
+      db,
+    );
+    db.close();
+    db = await openDatabase(dbName);
+
+    const saved = await getSession(session.id, db);
+    expect(saved?.sets[0]).toMatchObject({ weight: 102.5, reps: 6 });
+  });
+
+  it("keeps the Set's slot, its recorded moment and the other Sets untouched", async () => {
+    const session = await finishedSessionWithOneSet();
+
+    const updated = await updateSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 0, weight: 105, reps: 5 },
+      db,
+    );
+
+    expect(updated.sets).toEqual([
+      expect.objectContaining({ index: 0, weight: 105, reps: 5, confirmedAt: 1_000 }),
+      expect.objectContaining({ index: 1, weight: 100, reps: 7, confirmedAt: 2_000 }),
+    ]);
+  });
+
+  it("refuses a Set the Session never recorded", async () => {
+    const session = await finishedSessionWithOneSet();
+
+    await expect(
+      updateSet(session.id, { exerciseId: "supino-reto", index: 9, weight: 100, reps: 8 }, db),
+    ).rejects.toBeInstanceOf(MissingSetError);
+  });
+
+  it("refuses a Session that does not exist", async () => {
+    await expect(
+      updateSet("ses_ausente", { exerciseId: "supino-reto", index: 0, weight: 100, reps: 8 }, db),
+    ).rejects.toBeInstanceOf(MissingSessionError);
+  });
+});
+
+describe("deleteFinishedSession", () => {
+  it("removes the Session, so its Sets no longer count toward volume", async () => {
+    const deleted = await startSession(routine.id, db);
+    await appendSet(
+      deleted.id,
+      { exerciseId: "supino-reto", index: 0, weight: 100, reps: 8, confirmedAt: 1_000 },
+      db,
+    );
+    await finishSession(deleted.id, db);
+    const kept = await startSession(routine.id, db);
+    await finishSession(kept.id, db);
+
+    await deleteFinishedSession(deleted.id, db);
+
+    expect(await getSession(deleted.id, db)).toBeUndefined();
+    const remaining = await listFinishedSessions(db);
+    expect(remaining.map((session) => session.id)).toEqual([kept.id]);
+    expect(remaining.flatMap((session) => session.sets)).toEqual([]);
+  });
+
+  it("refuses the open Session, which is discarded from the Session screen", async () => {
+    const open = await startSession(routine.id, db);
+
+    await expect(deleteFinishedSession(open.id, db)).rejects.toThrow();
+    expect((await findActiveSession(db))?.id).toBe(open.id);
+  });
+
+  it("refuses a Session that does not exist", async () => {
+    await expect(deleteFinishedSession("ses_ausente", db)).rejects.toBeInstanceOf(
+      MissingSessionError,
+    );
+  });
+});
+
+describe("an Exercise that left the picker", () => {
+  it("still resolves its name for the Sets a finished Session recorded", async () => {
+    const exercise = await createExercise(
+      { name: "Rosca Scott unilateral", muscleGroup: "Bíceps" },
+      db,
+    );
+    const session = await startSession(routine.id, db);
+    await appendSet(session.id, { exerciseId: exercise.id, index: 0, weight: 30, reps: 10 }, db);
+    await finishSession(session.id, db);
+
+    await hideExercise(exercise.id, db);
+
+    expect(await listSelectableExercises(db)).not.toContainEqual(
+      expect.objectContaining({ id: exercise.id }),
+    );
+    const [finished] = await listFinishedSessions(db);
+    expect(finished?.sets[0]?.exerciseId).toBe(exercise.id);
+    const names = new Map((await listExercises(db)).map((row) => [row.id, row.name]));
+    expect(names.get(finished?.sets[0]?.exerciseId ?? "")).toBe("Rosca Scott unilateral");
   });
 });

@@ -81,9 +81,14 @@ export function HomeScreen() {
         Nova rotina
       </Link>
 
-      <Link to="/sobre" className={styles.about}>
-        Sobre
-      </Link>
+      <div className={styles.links}>
+        <Link to="/historico" className={styles.about}>
+          Histórico
+        </Link>
+        <Link to="/sobre" className={styles.about}>
+          Sobre
+        </Link>
+      </div>
     </Placeholder>
   );
 }

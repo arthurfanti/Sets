@@ -4,9 +4,6 @@ import type { StorageSummary } from "@/db/storage";
 export const NO_BACKUP_SENTENCE =
   "Não há backup: se você apagar o Sets da tela de início, o histórico vai junto.";
 
-/** The typed word that enables the only irreversible action. */
-export const DELETE_WORD = "apagar";
-
 const SHORT_MONTHS = [
   "jan",
   "fev",
@@ -59,9 +56,4 @@ export function describeDeletion(summary: StorageSummary): string {
 
 export function storageLabel(persisted: boolean): string {
   return `Armazenamento: ${persisted ? "Protegido" : "Não protegido"}`;
-}
-
-/** Case and stray spaces are forgiven; the word itself is not. */
-export function confirmsDeletion(typed: string): boolean {
-  return typed.trim().toLowerCase() === DELETE_WORD;
 }

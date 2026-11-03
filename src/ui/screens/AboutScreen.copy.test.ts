@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { confirmsDeletion } from "@/ui/confirmation";
 import {
-  confirmsDeletion,
   describeCounts,
   describeDeletion,
   NO_BACKUP_SENTENCE,
