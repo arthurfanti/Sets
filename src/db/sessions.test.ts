@@ -7,8 +7,11 @@ import {
   appendSet,
   discardSession,
   findActiveSession,
+  finishSession,
   getSession,
   listFinishedSessions,
+  MissingSessionError,
+  startEmptySession,
   startSession,
 } from "@/db/sessions";
 import type { Routine, Session } from "@/domain";
@@ -199,5 +202,106 @@ describe("discardSession", () => {
     expect(await getSession(session.id, db)).toBeUndefined();
     expect(await findActiveSession(db)).toBeUndefined();
     await expect(startSession(routine.id, db)).resolves.toMatchObject({ routineId: routine.id });
+  });
+});
+
+describe("startEmptySession", () => {
+  it("starts a Session with no Routine and no Plan", async () => {
+    const before = Date.now();
+    const session = await startEmptySession(db);
+
+    expect(session.id).toMatch(/^ses_/);
+    expect(session.routineId).toBeNull();
+    expect(session.startedAt).toBeGreaterThanOrEqual(before);
+    expect(session.plan).toEqual([]);
+    expect(session.sets).toEqual([]);
+  });
+
+  it("refuses a second active Session", async () => {
+    const session = await startSession(routine.id, db);
+
+    await expect(startEmptySession(db)).rejects.toBeInstanceOf(ActiveSessionError);
+    await expect(startEmptySession(db)).rejects.toMatchObject({ session: { id: session.id } });
+  });
+
+  it("can be discarded", async () => {
+    const session = await startEmptySession(db);
+
+    await discardSession(session.id, db);
+
+    expect(await findActiveSession(db)).toBeUndefined();
+  });
+});
+
+describe("finishSession", () => {
+  it("ends the Session at the last logged Set, not at the moment of finishing", async () => {
+    const session = await startSession(routine.id, db);
+    await appendSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 0, weight: 100, reps: 8, confirmedAt: 1_000 },
+      db,
+    );
+    await appendSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 1, weight: 100, reps: 7, confirmedAt: 2_500 },
+      db,
+    );
+
+    const finished = await finishSession(session.id, db);
+
+    expect(finished.endedAt).toBe(2_500);
+    expect((await getSession(session.id, db))?.endedAt).toBe(2_500);
+  });
+
+  it("leaves the start time alone", async () => {
+    const session = await startSession(routine.id, db);
+    await appendSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 0, weight: 100, reps: 8, confirmedAt: 5_000 },
+      db,
+    );
+
+    const finished = await finishSession(session.id, db);
+
+    expect(finished.startedAt).toBe(session.startedAt);
+  });
+
+  it("records a zero duration for an empty Session", async () => {
+    const session = await startEmptySession(db);
+    const finished = await finishSession(session.id, db);
+
+    expect(finished.endedAt).toBe(session.startedAt);
+    expect((await listFinishedSessions(db)).map((row) => row.id)).toEqual([session.id]);
+  });
+
+  it("does not move an ending that is already recorded", async () => {
+    const session = await startSession(routine.id, db);
+    await db.put("sessions", { ...session, endedAt: 4_000 });
+    await appendSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 0, weight: 100, reps: 8, confirmedAt: 9_000 },
+      db,
+    );
+
+    expect((await finishSession(session.id, db)).endedAt).toBe(4_000);
+  });
+
+  it("never rewrites the Routine, even when weights and Exercises deviated", async () => {
+    const before = await db.get("routines", routine.id);
+    const session = await startSession(routine.id, db);
+    await appendSet(
+      session.id,
+      { exerciseId: session.plan[0]?.exerciseId ?? "supino-reto", index: 0, weight: 130, reps: 3 },
+      db,
+    );
+    await addExerciseToSession(session.id, "agachamento-livre", db);
+
+    await finishSession(session.id, db);
+
+    expect(await db.get("routines", routine.id)).toEqual(before);
+  });
+
+  it("refuses a Session that does not exist", async () => {
+    await expect(finishSession("ses_ausente", db)).rejects.toBeInstanceOf(MissingSessionError);
   });
 });

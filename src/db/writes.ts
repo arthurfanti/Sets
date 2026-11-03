@@ -40,6 +40,8 @@ export interface SetWriter {
   pending(): QueuedSet[];
   /** The stored Session with anything still held for it applied. */
   applyPending(session: Session): Session;
+  /** Drops every held Set for a Session the Lifter discarded. */
+  clear(sessionId: string): void;
 }
 
 function keyOf(sessionId: string, input: SetInput): string {
@@ -103,6 +105,11 @@ export function createSetWriter(persist: PersistSet = appendSet): SetWriter {
         });
       }
       return withHeld;
+    },
+    clear(sessionId) {
+      for (const [key, held] of queue) {
+        if (held.sessionId === sessionId) queue.delete(key);
+      }
     },
   };
 }

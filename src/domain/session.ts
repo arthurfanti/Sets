@@ -100,3 +100,46 @@ export function activeSlot(plan: Prescription[], sets: PerformedSet[]): Slot | n
     planSlots(plan).find((slot) => !confirmed.has(setKey(slot.exerciseId, slot.index))) ?? null
   );
 }
+
+/**
+ * When the Session last recorded an effort: the newest Set's timestamp, or the
+ * start when nothing was logged. This — never "now" — is where a Session ends,
+ * so opening the app again after an overnight gap cannot bill the gap as
+ * training time.
+ */
+export function lastActivityAt(session: Session): number {
+  const lastSet = session.sets.reduce(
+    (latest, set) => Math.max(set.confirmedAt, latest),
+    Number.NEGATIVE_INFINITY,
+  );
+  return Number.isFinite(lastSet) ? lastSet : session.startedAt;
+}
+
+/**
+ * Training time, measured to the last recorded effort. A finished Session ends
+ * where it was closed; an empty one that was finished honestly measures zero.
+ */
+export function sessionDuration(session: Session): number {
+  const endedAt = session.endedAt ?? lastActivityAt(session);
+  return Math.max(0, endedAt - session.startedAt);
+}
+
+function sameLocalDay(a: number, b: number): boolean {
+  const first = new Date(a);
+  const second = new Date(b);
+  return (
+    first.getFullYear() === second.getFullYear() &&
+    first.getMonth() === second.getMonth() &&
+    first.getDate() === second.getDate()
+  );
+}
+
+/**
+ * A Session left open across a local date boundary is brought back to the
+ * Lifter's attention on the next launch instead of being silently closed. The
+ * boundary is the device's own day, because that is the day the Lifter trained.
+ */
+export function isStale(session: Session, now: number): boolean {
+  if (session.endedAt !== undefined) return false;
+  return !sameLocalDay(lastActivityAt(session), now);
+}

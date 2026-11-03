@@ -159,3 +159,91 @@
   color: var(--text-muted);
   font-size: var(--text-meta);
 }
+
+/* Pinned within thumb reach: Finish is the overwhelming majority action. */
+.footer {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+  background: var(--bg);
+}
+
+.discard {
+  min-height: var(--target);
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  font-weight: 600;
+}
+
+.discard:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.discard:disabled {
+  opacity: 0.5;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(0 0 0 / 64%);
+}
+
+.dialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-5);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.dialogTitle {
+  margin: 0 0 var(--space-3);
+  color: var(--text);
+  font-size: var(--text-title);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.dialogBody {
+  margin: 0 0 var(--space-4);
+  color: var(--text);
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+/* Destructive confirmation stays off the violet: colour marks interaction,
+   not danger, and violet behind a destructive tap would read as the safe one. */
+.confirm {
+  min-height: var(--action-height);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--text-muted);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.confirm:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.confirm:disabled {
+  color: var(--text-muted);
+  cursor: default;
+}

@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 import type { PerformedSet, Prescription, Session } from "@/domain";
-import { activeSlot, PREFILL_WALK_BACK, planSlots, prefillSlot } from "@/domain/session";
+import {
+  activeSlot,
+  isStale,
+  lastActivityAt,
+  PREFILL_WALK_BACK,
+  planSlots,
+  prefillSlot,
+  sessionDuration,
+} from "@/domain/session";
 
 const SUPINO = "supino-reto";
 const AGACHAMENTO = "agachamento";
@@ -225,5 +233,94 @@ describe("activeSlot", () => {
     const sets = [performed(SUPINO, 1, 100, 8)];
 
     expect(activeSlot(plan, sets)?.index).toBe(0);
+  });
+});
+
+/** A moment in the device's local zone, which is what "a day" means here. */
+function localTime(year: number, month: number, day: number, hour: number, minute = 0): number {
+  return new Date(year, month, day, hour, minute).getTime();
+}
+
+describe("lastActivityAt", () => {
+  it("is the timestamp of the last Set the Lifter logged", () => {
+    const session = open(
+      1,
+      [prescription(SUPINO, 3)],
+      [performed(SUPINO, 0, 100, 8, 5_000), performed(SUPINO, 1, 100, 8, 7_000)],
+    );
+
+    expect(lastActivityAt(session)).toBe(7_000);
+  });
+
+  it("falls back to the start when no Set was logged", () => {
+    expect(lastActivityAt(open(1, [prescription(SUPINO, 3)], []))).toBe(1);
+  });
+});
+
+describe("sessionDuration", () => {
+  it("measures to the last logged Set, not to the moment Finish is tapped", () => {
+    const session: Session = {
+      ...open(1_000, [prescription(SUPINO, 3)], [performed(SUPINO, 0, 100, 8, 3_600_000)]),
+      endedAt: 3_600_000,
+    };
+
+    expect(sessionDuration(session)).toBe(3_599_000);
+  });
+
+  it("is zero for an empty finished Session", () => {
+    expect(sessionDuration({ ...open(5_000, [], []), endedAt: 5_000 })).toBe(0);
+  });
+
+  it("measures an open Session to its last recorded effort", () => {
+    const session = open(1_000, [prescription(SUPINO, 3)], [performed(SUPINO, 0, 100, 8, 4_000)]);
+
+    expect(sessionDuration(session)).toBe(3_000);
+  });
+});
+
+describe("isStale", () => {
+  it("surfaces an open Session left across a local date boundary", () => {
+    const session = open(
+      localTime(2026, 0, 31, 22, 30),
+      [prescription(SUPINO, 3)],
+      [performed(SUPINO, 0, 100, 8, localTime(2026, 0, 31, 23, 10))],
+    );
+
+    expect(isStale(session, localTime(2026, 1, 1, 7, 0))).toBe(true);
+  });
+
+  it("surfaces an empty Session left open overnight", () => {
+    const session = open(localTime(2026, 0, 31, 23, 50), [], []);
+
+    expect(isStale(session, localTime(2026, 1, 1, 8, 0))).toBe(true);
+  });
+
+  it("leaves an open Session from earlier the same day alone", () => {
+    const session = open(
+      localTime(2026, 0, 31, 22, 30),
+      [prescription(SUPINO, 3)],
+      [performed(SUPINO, 0, 100, 8, localTime(2026, 0, 31, 23, 10))],
+    );
+
+    expect(isStale(session, localTime(2026, 0, 31, 23, 55))).toBe(false);
+  });
+
+  it("is not stale while the Lifter is still logging Sets today", () => {
+    const session = open(
+      localTime(2026, 0, 31, 23, 30),
+      [prescription(SUPINO, 3)],
+      [performed(SUPINO, 0, 100, 8, localTime(2026, 1, 1, 0, 20))],
+    );
+
+    expect(isStale(session, localTime(2026, 1, 1, 0, 30))).toBe(false);
+  });
+
+  it("never marks a finished Session stale", () => {
+    const session: Session = {
+      ...open(localTime(2026, 0, 31, 22, 0), [], []),
+      endedAt: localTime(2026, 0, 31, 22, 30),
+    };
+
+    expect(isStale(session, localTime(2026, 1, 5, 9, 0))).toBe(false);
   });
 });

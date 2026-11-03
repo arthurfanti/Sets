@@ -117,6 +117,19 @@ describe("set writer", () => {
     ]);
   });
 
+  it("drops held Sets when the Session is discarded", async () => {
+    const device = storage(2);
+    const writer = createSetWriter(device.persist);
+    await writer.write(session, firstSet);
+
+    writer.clear(session.id);
+
+    expect(writer.pending()).toEqual([]);
+    device.recover();
+    expect((await writer.flush()).saved).toBe(true);
+    expect(await storedSets()).toHaveLength(0);
+  });
+
   it("reports the Session unsaved when a finish flush still fails, keeping the Sets", async () => {
     const device = storage();
     const writer = createSetWriter(device.persist);

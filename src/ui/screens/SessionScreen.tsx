@@ -7,13 +7,22 @@ import {
   addExerciseToSession,
   discardSession,
   findActiveSession,
+  finishSession,
   getSession,
   listFinishedSessions,
   startSession,
 } from "@/db/sessions";
 import { getSetWriter } from "@/db/writes";
 import type { Exercise, Prescription, Routine, Session } from "@/domain";
-import { activeSlot, planSlots, prefillSlot, type Slot, setKey } from "@/domain/session";
+import {
+  activeSlot,
+  isStale,
+  lastActivityAt,
+  planSlots,
+  prefillSlot,
+  type Slot,
+  setKey,
+} from "@/domain/session";
 import { AddExerciseSheet } from "@/ui/components/AddExerciseSheet";
 import { SetRow } from "@/ui/components/SetRow";
 import styles from "./SessionScreen.module.css";
@@ -31,6 +40,7 @@ type ScreenState =
   | { kind: "missing" }
   | { kind: "finished"; session: Session }
   | { kind: "conflict"; active: Session; routineId: string }
+  | { kind: "stale"; data: LiveData }
   | { kind: "live"; data: LiveData };
 
 export function SessionScreen() {
@@ -38,6 +48,7 @@ export function SessionScreen() {
   const navigate = useNavigate();
   const [state, setState] = useState<ScreenState>({ kind: "loading" });
   const [picking, setPicking] = useState(false);
+  const [discarding, setDiscarding] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   /**
@@ -76,17 +87,15 @@ export function SessionScreen() {
           ]);
           if (cancelled) return;
           const writer = getSetWriter();
-          setState({
-            kind: "live",
-            data: {
-              // Sets held from a failed write are not in the stored document;
-              // re-apply them so a reload never makes a confirmed Set vanish.
-              session: writer.applyPending(session),
-              exercises,
-              routines,
-              history,
-            },
-          });
+          const data: LiveData = {
+            // Sets held from a failed write are not in the stored document;
+            // re-apply them so a reload never makes a confirmed Set vanish.
+            session: writer.applyPending(session),
+            exercises,
+            routines,
+            history,
+          };
+          setState(isStale(session, Date.now()) ? { kind: "stale", data } : { kind: "live", data });
           // Held Sets survive navigation; the bar returns only for this Session.
           setWriteFailed(writer.pending().some((held) => held.sessionId === session.id));
           return;
@@ -123,10 +132,48 @@ export function SessionScreen() {
     setBusy(true);
     try {
       await discardSession(activeId);
+      getSetWriter().clear(activeId);
       const started = await startSession(routineId);
       navigate(`/sessao/${started.id}`, { replace: true });
     } catch {
       setBusy(false);
+      setNotice("Não foi possível descartar a sessão.");
+    }
+  }
+
+  /**
+   * Finish ends the Session at its last logged Set, then returns Home. A Set
+   * still held in memory refuses the close: the Session stays open and the bar
+   * keeps saying the Sets are unsaved, rather than losing them on the way out.
+   */
+  async function finish(sessionId: string) {
+    setBusy(true);
+    try {
+      const flushed = await getSetWriter().flush();
+      if (!flushed.saved) {
+        setBusy(false);
+        setWriteFailed(true);
+        setNotice("Sessão não salva.");
+        return;
+      }
+      await finishSession(sessionId);
+      navigate("/", { replace: true });
+    } catch {
+      setBusy(false);
+      setNotice("Não foi possível finalizar a sessão.");
+    }
+  }
+
+  /** Discard deletes the draft, after the confirmation, and returns Home. */
+  async function discard(sessionId: string) {
+    setBusy(true);
+    try {
+      await discardSession(sessionId);
+      getSetWriter().clear(sessionId);
+      navigate("/", { replace: true });
+    } catch {
+      setBusy(false);
+      setDiscarding(false);
       setNotice("Não foi possível descartar a sessão.");
     }
   }
@@ -230,6 +277,41 @@ export function SessionScreen() {
     );
   }
 
+  if (state.kind === "stale") {
+    const day = new Date(lastActivityAt(state.data.session)).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+    return (
+      <Shell title="Sessão em aberto" back>
+        {writeFailed ? <WriteWarning /> : null}
+        <p className={styles.message}>
+          Esta sessão ficou aberta desde {day}. Continue de onde parou ou finalize no último
+          registro — o tempo parado não conta.
+        </p>
+        <div className={styles.actions}>
+          <button
+            className={styles.primary}
+            disabled={busy}
+            type="button"
+            onClick={() => setState({ kind: "live", data: state.data })}
+          >
+            Continuar sessão
+          </button>
+          <button
+            className={styles.secondary}
+            disabled={busy}
+            type="button"
+            onClick={() => void finish(state.data.session.id)}
+          >
+            Finalizar sessão
+          </button>
+        </div>
+        {notice ? <p className={styles.notice}>{notice}</p> : null}
+      </Shell>
+    );
+  }
+
   const { data } = state;
   const routine = data.routines.find((row) => row.id === data.session.routineId);
   const exerciseById = new Map(data.exercises.map((exercise) => [exercise.id, exercise]));
@@ -241,11 +323,7 @@ export function SessionScreen() {
 
   return (
     <Shell title={routine?.name ?? "Sessão livre"} back>
-      {writeFailed ? (
-        <p className={styles.writeWarning} role="alert">
-          Não foi possível salvar. Suas séries continuam aqui.
-        </p>
-      ) : null}
+      {writeFailed ? <WriteWarning /> : null}
 
       <p className={styles.meta}>
         {data.session.plan.length === 0
@@ -299,6 +377,25 @@ export function SessionScreen() {
         {notice}
       </p>
 
+      <footer className={styles.footer}>
+        <button
+          className={styles.primary}
+          type="button"
+          disabled={busy}
+          onClick={() => void finish(data.session.id)}
+        >
+          Finalizar
+        </button>
+        <button
+          className={styles.discard}
+          type="button"
+          disabled={busy}
+          onClick={() => setDiscarding(true)}
+        >
+          Descartar
+        </button>
+      </footer>
+
       {picking ? (
         <AddExerciseSheet
           exercises={data.exercises}
@@ -307,7 +404,23 @@ export function SessionScreen() {
           onPick={(exerciseId) => void pickExercise(data, exerciseId)}
         />
       ) : null}
+
+      {discarding ? (
+        <DiscardDialog
+          busy={busy}
+          onCancel={() => setDiscarding(false)}
+          onConfirm={() => void discard(data.session.id)}
+        />
+      ) : null}
     </Shell>
+  );
+}
+
+function WriteWarning() {
+  return (
+    <p className={styles.writeWarning} role="alert">
+      Não foi possível salvar. Suas séries continuam aqui.
+    </p>
   );
 }
 
@@ -337,5 +450,44 @@ function Shell({ title, back = false, children }: ShellProps) {
       </header>
       <div className={styles.body}>{children}</div>
     </main>
+  );
+}
+
+interface DiscardDialogProps {
+  busy: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+}
+
+/**
+ * Discarding is irreversible — the draft never reaches history — so it asks
+ * first. Same dialog shape as the delete-all confirmation in About.
+ */
+function DiscardDialog({ busy, onCancel, onConfirm }: DiscardDialogProps) {
+  return (
+    <div className={styles.overlay}>
+      <div
+        className={styles.dialog}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="descartar-titulo"
+        aria-describedby="descartar-descricao"
+      >
+        <h2 id="descartar-titulo" className={styles.dialogTitle}>
+          Descartar sessão?
+        </h2>
+        <p id="descartar-descricao" className={styles.dialogBody}>
+          As séries registradas serão apagadas e a sessão não vai para o histórico.
+        </p>
+        <div className={styles.actions}>
+          <button type="button" className={styles.confirm} onClick={onConfirm} disabled={busy}>
+            {busy ? "Descartando…" : "Descartar sessão"}
+          </button>
+          <button type="button" className={styles.secondary} onClick={onCancel} disabled={busy}>
+            Manter sessão
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
