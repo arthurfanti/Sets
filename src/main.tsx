@@ -1,7 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import { router } from "@/app/router";
+import { App } from "@/app/App";
 import { requestPersistentStorage } from "@/db/storage";
 import "@/ui/global.css";
 
@@ -17,6 +16,6 @@ if (!container) {
 
 createRoot(container).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <App />
   </StrictMode>,
 );
