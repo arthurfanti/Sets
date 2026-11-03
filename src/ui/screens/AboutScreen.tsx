@@ -5,10 +5,10 @@ import {
   readStorageSummary,
   type StorageSummary,
 } from "@/db/storage";
+import { confirmsDeletion } from "@/ui/confirmation";
 import { Placeholder } from "@/ui/Placeholder";
 import packageJson from "../../../package.json";
 import {
-  confirmsDeletion,
   describeCounts,
   describeDeletion,
   NO_BACKUP_SENTENCE,

@@ -1,5 +1,6 @@
 import { readyDatabase, type SetsDb } from "@/db/database";
 import type { PerformedSet, Prescription, Session } from "@/domain";
+import { applySet } from "@/domain/session";
 
 /**
  * Session persistence. A Session is one document: its Plan and every Set it
@@ -139,14 +140,8 @@ export async function appendSet(
     reps: input.reps,
     confirmedAt: input.confirmedAt ?? Date.now(),
   };
-  const sets = withIndexes(session.sets);
-  const existing = sets.findIndex(
-    (row) => row.exerciseId === set.exerciseId && row.index === set.index,
-  );
-  if (existing >= 0) sets[existing] = set;
-  else sets.push(set);
+  const updated = applySet({ ...session, sets: withIndexes(session.sets) }, set);
 
-  const updated: Session = { ...session, sets };
   await tx.store.put(updated);
   await tx.done;
   return updated;

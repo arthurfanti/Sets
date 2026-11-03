@@ -78,6 +78,21 @@ export function setKey(exerciseId: string, index: number): string {
   return `${exerciseId}\u0000${index}`;
 }
 
+/**
+ * The Session as it stands with one Set confirmed. A Set replaces the slot it
+ * names and otherwise appends, so the same value can be applied either to a
+ * stored document or to the in-memory copy a failed write leaves on screen.
+ */
+export function applySet(session: Session, set: PerformedSet): Session {
+  const sets = [...session.sets];
+  const existing = sets.findIndex(
+    (row) => row.exerciseId === set.exerciseId && row.index === set.index,
+  );
+  if (existing >= 0) sets[existing] = set;
+  else sets.push(set);
+  return { ...session, sets };
+}
+
 /** The first slot that has no confirmed Set yet, in Plan order. */
 export function activeSlot(plan: Prescription[], sets: PerformedSet[]): Slot | null {
   const confirmed = new Set(sets.map((set) => setKey(set.exerciseId, set.index)));
