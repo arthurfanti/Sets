@@ -1,0 +1,63 @@
+/* A muted bar over the app, never a sheet or a dialog: an update is information,
+   not a decision that interrupts. Violet appears only on the action. */
+
+.banner {
+  position: fixed;
+  z-index: 20;
+  top: max(var(--space-3), env(safe-area-inset-top));
+  right: var(--space-4);
+  left: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 528px;
+  margin-inline: auto;
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-4);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  animation: enter var(--motion) ease-out;
+}
+
+.message {
+  flex: 1;
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-body);
+}
+
+.dismiss,
+.action {
+  min-height: var(--target);
+  padding-inline: var(--space-3);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.dismiss {
+  color: var(--text-muted);
+}
+
+.action {
+  color: var(--accent-interaction);
+}
+
+.action:disabled {
+  color: var(--text-muted);
+}
+
+.dismiss:focus-visible,
+.action:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: -2px;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--space-2)));
+  }
+}
