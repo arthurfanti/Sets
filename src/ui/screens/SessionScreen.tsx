@@ -5,13 +5,13 @@ import { listExercises, listRoutines } from "@/db/repositories";
 import {
   ActiveSessionError,
   addExerciseToSession,
-  appendSet,
   discardSession,
   findActiveSession,
   getSession,
   listFinishedSessions,
   startSession,
 } from "@/db/sessions";
+import { getSetWriter } from "@/db/writes";
 import type { Exercise, Prescription, Routine, Session } from "@/domain";
 import { activeSlot, planSlots, prefillSlot, type Slot, setKey } from "@/domain/session";
 import { AddExerciseSheet } from "@/ui/components/AddExerciseSheet";
@@ -40,12 +40,19 @@ export function SessionScreen() {
   const [picking, setPicking] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  /**
+   * True while any confirmed Set is only in memory. It clears on the flush a
+   * later successful write performs, and is never dismissable: the bar is the
+   * only sign that closing the app would lose the Sets above it.
+   */
+  const [writeFailed, setWriteFailed] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
     setState({ kind: "loading" });
     setNotice(null);
+    setWriteFailed(false);
 
     void (async () => {
       try {
@@ -68,7 +75,20 @@ export function SessionScreen() {
             listFinishedSessions(),
           ]);
           if (cancelled) return;
-          setState({ kind: "live", data: { session, exercises, routines, history } });
+          const writer = getSetWriter();
+          setState({
+            kind: "live",
+            data: {
+              // Sets held from a failed write are not in the stored document;
+              // re-apply them so a reload never makes a confirmed Set vanish.
+              session: writer.applyPending(session),
+              exercises,
+              routines,
+              history,
+            },
+          });
+          // Held Sets survive navigation; the bar returns only for this Session.
+          setWriteFailed(writer.pending().some((held) => held.sessionId === session.id));
           return;
         }
 
@@ -118,22 +138,19 @@ export function SessionScreen() {
     weight: number,
     reps: number,
   ) {
-    try {
-      const updated = await appendSet(data.session.id, {
-        exerciseId: slot.exerciseId,
-        index: slot.index,
-        weight,
-        reps,
-      });
-      setState((previous) =>
-        previous.kind === "live"
-          ? { ...previous, data: { ...previous.data, session: updated } }
-          : previous,
-      );
-      setNotice(`Série ${slot.index + 1} de ${exerciseName} confirmada.`);
-    } catch {
-      setNotice("Não foi possível salvar a série. Tente de novo.");
-    }
+    const result = await getSetWriter().write(data.session, {
+      exerciseId: slot.exerciseId,
+      index: slot.index,
+      weight,
+      reps,
+    });
+    setState((previous) =>
+      previous.kind === "live"
+        ? { ...previous, data: { ...previous.data, session: result.session } }
+        : previous,
+    );
+    setWriteFailed(result.pending > 0);
+    setNotice(result.saved ? `Série ${slot.index + 1} de ${exerciseName} confirmada.` : null);
   }
 
   async function pickExercise(data: LiveData, exerciseId: string) {
@@ -224,6 +241,12 @@ export function SessionScreen() {
 
   return (
     <Shell title={routine?.name ?? "Sessão livre"} back>
+      {writeFailed ? (
+        <p className={styles.writeWarning} role="alert">
+          Não foi possível salvar. Suas séries continuam aqui.
+        </p>
+      ) : null}
+
       <p className={styles.meta}>
         {data.session.plan.length === 0
           ? "Nenhum exercício no Plano."
