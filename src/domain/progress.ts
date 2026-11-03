@@ -39,13 +39,19 @@ export interface OneRepMaxPoint {
 }
 
 /**
- * Epley: weight × (1 + reps/30), applied unchanged at one rep. A Set outside
- * the window returns null rather than an estimate, so no caller can mistake a
- * clamped value for a real one.
+ * Epley: weight × (1 + reps/30).
+ *
+ * At one rep the estimate is the weight itself: Epley is a regression fitted to
+ * multi-rep Sets, and inflating a true single by 3.3% produces a number the
+ * lifter can check against the bar and see is wrong.
+ *
+ * A Set outside the window returns null rather than an estimate, so no caller
+ * can mistake a clamped value for a real one.
  */
 export function estimatedOneRepMax(weight: number, reps: number): number | null {
   if (!Number.isFinite(weight) || !Number.isInteger(reps)) return null;
   if (reps < ONE_REP_MAX_REP_WINDOW.min || reps > ONE_REP_MAX_REP_WINDOW.max) return null;
+  if (reps === 1) return weight;
   return weight * (1 + reps / 30);
 }
 

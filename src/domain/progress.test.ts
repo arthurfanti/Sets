@@ -36,9 +36,9 @@ function session(startedAt: number, sets: PerformedSet[]): Session {
 }
 
 describe("estimatedOneRepMax", () => {
-  it("applies Epley at one rep", () => {
-    // 100 kg × (1 + 1/30)
-    expect(estimatedOneRepMax(100, 1)).toBeCloseTo(103.33, 1);
+  it("returns the weight itself at one rep, because a true single is the 1RM", () => {
+    expect(estimatedOneRepMax(100, 1)).toBe(100);
+    expect(estimatedOneRepMax(92.5, 1)).toBe(92.5);
   });
 
   it("applies Epley at the ten-rep edge of the window", () => {
