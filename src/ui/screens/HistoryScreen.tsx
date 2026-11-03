@@ -268,7 +268,11 @@ function ExpandedSession({
           const exerciseName = resolveExerciseName(exerciseNames, block.exerciseId);
           return (
             <section key={block.exerciseId} className={styles.block}>
-              <h3 className={styles.blockTitle}>{exerciseName}</h3>
+              <h3 className={styles.blockTitle}>
+                <Link className={styles.blockLink} to={`/exercicio/${block.exerciseId}`}>
+                  {exerciseName}
+                </Link>
+              </h3>
               <ul className={styles.sets}>
                 {block.sets.map((set) => (
                   <SetCorrectionRow

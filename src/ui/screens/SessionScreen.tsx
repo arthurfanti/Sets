@@ -38,7 +38,7 @@ type ScreenState =
   | { kind: "loading" }
   | { kind: "failed" }
   | { kind: "missing" }
-  | { kind: "finished"; session: Session }
+  | { kind: "finished"; session: Session; exercises: Exercise[] }
   | { kind: "conflict"; active: Session; routineId: string }
   | { kind: "stale"; data: LiveData }
   | { kind: "live"; data: LiveData };
@@ -77,7 +77,9 @@ export function SessionScreen() {
             return;
           }
           if (session.endedAt !== undefined) {
-            setState({ kind: "finished", session });
+            const exercises = await listExercises();
+            if (cancelled) return;
+            setState({ kind: "finished", session, exercises });
             return;
           }
           const [exercises, routines, history] = await Promise.all([
@@ -238,9 +240,22 @@ export function SessionScreen() {
   }
 
   if (state.kind === "finished") {
+    const names = new Map(state.exercises.map((exercise) => [exercise.id, exercise.name]));
+    const exerciseIds = [...new Set(state.session.sets.map((set) => set.exerciseId))];
     return (
       <Shell title="Sessão">
         <p className={styles.message}>Esta sessão já foi encerrada.</p>
+        {exerciseIds.length > 0 ? (
+          <ul className={styles.finishedList}>
+            {exerciseIds.map((exerciseId) => (
+              <li key={exerciseId}>
+                <Link className={styles.finishedLink} to={`/exercicio/${exerciseId}`}>
+                  {names.get(exerciseId) ?? "Exercício"}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <Link className={styles.back} to="/">
           Voltar para as rotinas
         </Link>
