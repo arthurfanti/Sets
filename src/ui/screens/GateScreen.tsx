@@ -36,11 +36,9 @@ export function GateScreen({ cause, onRetry }: GateScreenProps) {
           <button className={styles.primary} type="button" onClick={onRetry}>
             Tentar de novo
           </button>
-          {copy.canReset ? (
-            <button className={styles.danger} type="button" onClick={() => setConfirming(true)}>
-              {RESET_LABEL}
-            </button>
-          ) : null}
+          <button className={styles.danger} type="button" onClick={() => setConfirming(true)}>
+            {RESET_LABEL}
+          </button>
         </div>
       </div>
 

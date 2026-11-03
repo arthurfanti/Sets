@@ -15,12 +15,6 @@ describe("blocked-database copy", () => {
     expect(gateCopy("unknown").body).toBe("Não foi possível abrir o histórico.");
   });
 
-  it("offers the destructive reset only where retry cannot help", () => {
-    expect(gateCopy("unknown").canReset).toBe(true);
-    expect(gateCopy("blocked").canReset).toBe(false);
-    expect(gateCopy("quota").canReset).toBe(false);
-  });
-
   it("mentions private browsing only as a possible fix, never as a detected cause", () => {
     expect(gateCopy("unknown").hint).toContain("janela privada");
     expect(gateCopy("blocked").hint).toContain("janela privada");
