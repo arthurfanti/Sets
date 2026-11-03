@@ -1,0 +1,115 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 64px;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+}
+
+.row[data-active="true"] {
+  background: var(--surface-2);
+  border-left-color: var(--accent-interaction);
+}
+
+.row[data-confirmed="true"] {
+  background: var(--surface-1);
+}
+
+.index {
+  width: 16px;
+  flex: none;
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  text-align: right;
+}
+
+.values {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.weight,
+.reps {
+  min-width: 0;
+  min-height: var(--target);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  font-size: var(--text-hero);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.weight {
+  width: 5ch;
+  text-align: right;
+}
+
+.reps {
+  width: 3ch;
+  text-align: left;
+}
+
+.weight[data-muted="true"],
+.reps[data-muted="true"] {
+  color: var(--text-muted);
+}
+
+.weight:focus-visible,
+.reps:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.unit {
+  color: var(--text-muted);
+  font-size: var(--text-label);
+}
+
+.times {
+  padding-inline: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-body);
+}
+
+.confirm {
+  display: grid;
+  place-items: center;
+  width: var(--target);
+  height: var(--target);
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: var(--text-row);
+}
+
+.confirm:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.confirm:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.row[data-active="true"] .confirm:not(:disabled) {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.row[data-confirmed="true"] .confirm {
+  opacity: 1;
+  color: var(--text-muted);
+  border-color: transparent;
+}

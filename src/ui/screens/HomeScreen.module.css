@@ -20,15 +20,20 @@
 }
 
 .row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  flex: 1;
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
   min-height: var(--target);
   padding: var(--space-3) var(--space-4);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
   border-radius: var(--radius);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: -2px;
 }
 
 .name {
@@ -56,10 +61,32 @@
   font-size: var(--text-meta);
 }
 
-.rowText {
-  display: grid;
+.rowItem {
+  display: flex;
+  align-items: center;
   gap: var(--space-1);
-  min-width: 0;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.resume {
+  display: flex;
+  min-height: var(--target);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--accent-interaction);
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.resume:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
 }
 
 .edit {
@@ -67,7 +94,7 @@
   display: inline-flex;
   align-items: center;
   min-height: var(--target);
-  padding-inline: var(--space-2);
+  padding-inline: var(--space-3) var(--space-4);
   color: var(--text-muted);
   font-size: var(--text-meta);
   text-decoration: none;
@@ -79,7 +106,7 @@
 
 .edit:focus-visible {
   outline: 2px solid var(--accent-interaction);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
 .primary {
@@ -100,4 +127,23 @@
 .primary:focus-visible {
   outline: 2px solid var(--text);
   outline-offset: 2px;
+}
+
+.resumeLabel {
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.resumeAction {
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.about {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  text-decoration: none;
 }

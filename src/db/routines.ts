@@ -1,5 +1,4 @@
-import type { SetsDb } from "@/db/database";
-import { defaultDatabase } from "@/db/repositories";
+import { readyDatabase, type SetsDb } from "@/db/database";
 import type { Prescription, Routine } from "@/domain";
 
 /**
@@ -17,7 +16,7 @@ export class BuiltInRoutineError extends Error {
 }
 
 export async function getRoutine(id: string, database?: SetsDb): Promise<Routine | undefined> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   return db.get("routines", id);
 }
 
@@ -33,7 +32,7 @@ export async function createRoutine(
   input: { name: string; prescriptions: Prescription[] },
   database?: SetsDb,
 ): Promise<Routine> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const routine: Routine = {
     id: `rot_${crypto.randomUUID()}`,
     name: input.name.trim(),
@@ -49,7 +48,7 @@ export async function createRoutine(
  * Built-in rule enforceable: saving is the moment a fork must happen instead.
  */
 export async function saveRoutine(routine: Routine, database?: SetsDb): Promise<Routine> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const stored = await db.get("routines", routine.id);
   if (routine.source === "builtin" || stored?.source === "builtin") {
     throw new BuiltInRoutineError(routine.id);
@@ -61,7 +60,7 @@ export async function saveRoutine(routine: Routine, database?: SetsDb): Promise<
 }
 
 export async function deleteRoutine(id: string, database?: SetsDb): Promise<void> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const stored = await db.get("routines", id);
   if (stored?.source === "builtin") throw new BuiltInRoutineError(id);
   await db.delete("routines", id);

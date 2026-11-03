@@ -1,5 +1,4 @@
-import type { SetsDb } from "@/db/database";
-import { defaultDatabase } from "@/db/repositories";
+import { readyDatabase, type SetsDb } from "@/db/database";
 import type { Exercise, MuscleGroup } from "@/domain";
 import { findNameConflict } from "@/domain/naming";
 
@@ -37,7 +36,7 @@ export async function createExercise(
   input: { name: string; muscleGroup: MuscleGroup },
   database?: SetsDb,
 ): Promise<Exercise> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const name = input.name.trim();
   if (name.length === 0) throw new Error("Um exercício precisa de um nome.");
 
@@ -60,7 +59,7 @@ export async function renameExercise(
   name: string,
   database?: SetsDb,
 ): Promise<Exercise> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const stored = await db.get("exercises", id);
   if (!stored) throw new Error(`Exercício não encontrado: ${id}`);
   if (stored.source === "builtin") throw new BuiltInExerciseError(id);
@@ -77,7 +76,7 @@ export async function renameExercise(
 }
 
 export async function hideExercise(id: string, database?: SetsDb): Promise<void> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const stored = await db.get("exercises", id);
   if (!stored) throw new Error(`Exercício não encontrado: ${id}`);
   if (stored.source === "builtin") throw new BuiltInExerciseError(id);
@@ -88,7 +87,7 @@ export async function hideExercise(id: string, database?: SetsDb): Promise<void>
 
 /** What the picker may offer: Built-ins plus the Lifter's visible Exercises. */
 export async function listSelectableExercises(database?: SetsDb): Promise<Exercise[]> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const all = await db.getAll("exercises");
   return all.filter((exercise) => exercise.hiddenAt === undefined);
 }

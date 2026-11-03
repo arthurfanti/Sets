@@ -60,7 +60,7 @@ describe("renameExercise", () => {
       routineId: null,
       startedAt: 1,
       plan: [],
-      sets: [{ exerciseId: exercise.id, weight: 20, reps: 10, confirmedAt: 2 }],
+      sets: [{ exerciseId: exercise.id, index: 0, weight: 20, reps: 10, confirmedAt: 2 }],
     };
     await db.put("sessions", session);
 
