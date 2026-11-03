@@ -17,6 +17,8 @@ type View =
 interface ExercisePickerProps {
   onPick: (exercise: Exercise) => void;
   onClose: () => void;
+  /** Exercises already used by the plan being edited; they cannot be picked twice. */
+  added?: readonly string[];
   /** Fired after a custom Exercise is created, renamed or hidden. */
   onExercisesChanged?: () => void;
 }
@@ -34,7 +36,12 @@ const TITLES: Record<View["name"], string> = {
  * editable in place. Creating is offered only when the search finds nothing,
  * prefilled with what was typed.
  */
-export function ExercisePicker({ onPick, onClose, onExercisesChanged }: ExercisePickerProps) {
+export function ExercisePicker({
+  onPick,
+  onClose,
+  added = [],
+  onExercisesChanged,
+}: ExercisePickerProps) {
   const [selectable, setSelectable] = useState<Exercise[] | null>(null);
   const [every, setEvery] = useState<Exercise[]>([]);
   const [view, setView] = useState<View>({ name: "list" });
@@ -53,6 +60,7 @@ export function ExercisePicker({ onPick, onClose, onExercisesChanged }: Exercise
   const groups = groupByMuscle(
     (selectable ?? []).filter((exercise) => matchesQuery(exercise, query)),
   );
+  const addedIds = new Set(added);
   const typed = query.trim();
   const nothingFound = groups.length === 0;
 
@@ -151,15 +159,22 @@ export function ExercisePicker({ onPick, onClose, onExercisesChanged }: Exercise
             <ul className={styles.list}>
               {group.exercises.map((exercise) => (
                 <li key={exercise.id} className={styles.row}>
-                  <button
-                    type="button"
-                    className={styles.pick}
-                    onClick={() => onPick(exercise)}
-                    aria-label={`Adicionar ${exercise.name}`}
-                  >
-                    {exercise.name}
-                  </button>
-                  {exercise.source === "user" ? (
+                  {addedIds.has(exercise.id) ? (
+                    <span className={styles.added}>
+                      <span className={styles.pickName}>{exercise.name}</span>
+                      <span className={styles.addedNote}>Já adicionado</span>
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      className={styles.pick}
+                      onClick={() => onPick(exercise)}
+                      aria-label={`Adicionar ${exercise.name}`}
+                    >
+                      {exercise.name}
+                    </button>
+                  )}
+                  {exercise.source === "user" && !addedIds.has(exercise.id) ? (
                     <button
                       type="button"
                       className={styles.more}

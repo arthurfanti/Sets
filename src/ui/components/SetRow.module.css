@@ -59,7 +59,7 @@
 
 .weight[data-muted="true"],
 .reps[data-muted="true"] {
-  color: var(--text-muted);
+  color: var(--text-suggestion);
 }
 
 .weight:focus-visible,

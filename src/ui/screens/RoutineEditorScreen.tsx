@@ -13,6 +13,7 @@ import type { Exercise, Prescription, Routine } from "@/domain";
 import { moveItem } from "@/domain/order";
 import { ExercisePicker } from "@/ui/components/ExercisePicker";
 import { PrescriptionSheet } from "@/ui/components/PrescriptionSheet";
+import { formatKg } from "@/ui/format";
 import styles from "./RoutineEditorScreen.module.css";
 
 interface DraftRow {
@@ -155,20 +156,24 @@ export function RoutineEditorScreen() {
   }
 
   function addExercise(exercise: Exercise) {
-    setDraft((current) =>
-      current === null
-        ? current
-        : {
-            ...current,
-            rows: [
-              ...current.rows,
-              {
-                key: crypto.randomUUID(),
-                prescription: { exerciseId: exercise.id, sets: 3, reps: 10 },
-              },
-            ],
+    setDraft((current) => {
+      if (current === null) return current;
+      // A Session keys its Sets by Exercise and slot, so the same Exercise
+      // twice in one Routine would make the second block overwrite the first.
+      if (current.rows.some((row) => row.prescription.exerciseId === exercise.id)) {
+        return current;
+      }
+      return {
+        ...current,
+        rows: [
+          ...current.rows,
+          {
+            key: crypto.randomUUID(),
+            prescription: { exerciseId: exercise.id, sets: 3, reps: 10 },
           },
-    );
+        ],
+      };
+    });
     setPicking(false);
   }
 
@@ -298,6 +303,7 @@ export function RoutineEditorScreen() {
 
       {picking ? (
         <ExercisePicker
+          added={draft.rows.map((row) => row.prescription.exerciseId)}
           onPick={addExercise}
           onClose={() => setPicking(false)}
           onExercisesChanged={() => void refreshExercises()}
@@ -424,7 +430,7 @@ function PrescriptionRow({
 
 function describe(prescription: Prescription): string {
   const parts = [`${prescription.sets} séries`, `${prescription.reps} reps`];
-  if (prescription.weight !== undefined) parts.push(`${prescription.weight} kg`);
+  if (prescription.weight !== undefined) parts.push(formatKg(prescription.weight));
   return parts.join(" · ");
 }
 

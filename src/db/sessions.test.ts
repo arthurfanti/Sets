@@ -63,6 +63,29 @@ describe("startSession", () => {
       session: { id: session.id },
     });
   });
+
+  it("keeps one block per Exercise, so a repeated Exercise cannot overwrite its own Set", async () => {
+    await db.put("routines", {
+      ...routine,
+      id: "rot_duplicada",
+      source: "user",
+      prescriptions: [
+        { exerciseId: "supino-reto", sets: 2, reps: 8 },
+        { exerciseId: "supino-reto", sets: 1, reps: 10 },
+      ],
+    });
+
+    const session = await startSession("rot_duplicada", db);
+    await appendSet(session.id, { exerciseId: "supino-reto", index: 0, weight: 100, reps: 8 }, db);
+    const saved = await appendSet(
+      session.id,
+      { exerciseId: "supino-reto", index: 1, weight: 100, reps: 8 },
+      db,
+    );
+
+    expect(session.plan).toEqual([{ exerciseId: "supino-reto", sets: 2, reps: 8 }]);
+    expect(saved.sets).toHaveLength(2);
+  });
 });
 
 describe("findActiveSession", () => {

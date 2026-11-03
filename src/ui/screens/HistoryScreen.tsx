@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { listExercises, listRoutines } from "@/db/repositories";
-import { deleteFinishedSession, listFinishedSessions, updateSet } from "@/db/sessions";
+import {
+  ActiveSessionError,
+  deleteFinishedSession,
+  listFinishedSessions,
+  startEmptySession,
+  updateSet,
+} from "@/db/sessions";
 import type { PerformedSet, Session } from "@/domain";
 import {
   describeSession,
@@ -12,6 +18,7 @@ import {
   sessionTitle,
 } from "@/domain/history";
 import { parseReps, parseWeight } from "@/ui/components/SetRow";
+import { formatNumber } from "@/ui/format";
 import styles from "./HistoryScreen.module.css";
 
 /**
@@ -33,6 +40,7 @@ function panelId(sessionId: string): string {
 }
 
 export function HistoryScreen() {
+  const navigate = useNavigate();
   const [state, setState] = useState<ScreenState>({ kind: "loading" });
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<Session | null>(null);
@@ -65,6 +73,27 @@ export function HistoryScreen() {
 
   function toggle(sessionId: string) {
     setExpandedId((current) => (current === sessionId ? null : sessionId));
+  }
+
+  /**
+   * The Session list is also where a Session with no Routine starts: the
+   * fallback for a day that fits no plan. One active Session still holds, so
+   * an open one is resumed instead of refused.
+   */
+  async function startEmpty() {
+    setBusy(true);
+    setNotice(null);
+    try {
+      const session = await startEmptySession();
+      navigate(`/sessao/${session.id}`);
+    } catch (error) {
+      if (error instanceof ActiveSessionError) {
+        navigate(`/sessao/${error.session.id}`);
+        return;
+      }
+      setBusy(false);
+      setNotice("Não foi possível iniciar a sessão.");
+    }
   }
 
   /** Escape inside the panel closes it and puts focus back on its row. */
@@ -148,6 +177,15 @@ export function HistoryScreen() {
       </header>
 
       <div className={styles.body}>
+        <button
+          type="button"
+          className={styles.start}
+          disabled={busy || state.kind !== "ready"}
+          onClick={() => void startEmpty()}
+        >
+          Iniciar sessão livre
+        </button>
+
         {state.kind === "failed" ? (
           <p className={styles.message}>Não foi possível carregar o histórico.</p>
         ) : null}
@@ -302,7 +340,7 @@ interface SetCorrectionRowProps {
 }
 
 function toText(value: number): string {
-  return String(value).replace(".", ",");
+  return formatNumber(value);
 }
 
 /**

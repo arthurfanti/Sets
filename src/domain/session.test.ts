@@ -8,6 +8,7 @@ import {
   planSlots,
   prefillSlot,
   sessionDuration,
+  uniquePlan,
 } from "@/domain/session";
 
 const SUPINO = "supino-reto";
@@ -63,6 +64,18 @@ describe("planSlots", () => {
   });
 });
 
+describe("uniquePlan", () => {
+  it("keeps one block per Exercise, in the order it first appears", () => {
+    const plan = [
+      prescription(SUPINO, 3),
+      prescription(AGACHAMENTO, 2),
+      prescription(SUPINO, 5, 10, 80),
+    ];
+
+    expect(uniquePlan(plan)).toEqual([prescription(SUPINO, 3), prescription(AGACHAMENTO, 2)]);
+  });
+});
+
 describe("prefillSlot", () => {
   it("takes the Set at the same index from the most recent finished Session", () => {
     const history = [
@@ -107,7 +120,7 @@ describe("prefillSlot", () => {
     });
   });
 
-  it("walks back a Session that contains the Exercise but logged none of it", () => {
+  it("skips a Session that prescribed the Exercise but logged none of it", () => {
     const history = [
       finished(2, [prescription(SUPINO, 3), prescription(AGACHAMENTO, 3)], []),
       finished(1, [prescription(SUPINO, 3)], [performed(SUPINO, 0, 90, 12)]),
@@ -120,23 +133,29 @@ describe("prefillSlot", () => {
     });
   });
 
-  it("stops walking back after five Sessions", () => {
+  it("finds history behind Sessions that prescribed but did not log the Exercise", () => {
     const history: Session[] = [];
     for (let offset = 0; offset < PREFILL_WALK_BACK; offset++) {
-      history.push(finished(100 - offset, [prescription(SUPINO, 3)], []));
+      history.push(
+        finished(
+          100 - offset,
+          [prescription(SUPINO, 3), prescription(AGACHAMENTO, 3)],
+          [performed(AGACHAMENTO, 0, 120, 5)],
+        ),
+      );
     }
     history.push(finished(1, [prescription(SUPINO, 3)], [performed(SUPINO, 0, 90, 12)]));
 
     expect(prefillSlot(SUPINO, 0, history, 70)).toEqual({
-      weight: 70,
-      reps: null,
-      source: "target",
+      weight: 90,
+      reps: 12,
+      source: "history",
     });
   });
 
-  it("still finds history when fewer than five Sessions stand in between", () => {
+  it("does not let Sessions that only prescribed the Exercise hide a real earlier one", () => {
     const history: Session[] = [];
-    for (let offset = 0; offset < PREFILL_WALK_BACK - 1; offset++) {
+    for (let offset = 0; offset < PREFILL_WALK_BACK; offset++) {
       history.push(finished(100 - offset, [prescription(SUPINO, 3)], []));
     }
     history.push(finished(1, [prescription(SUPINO, 3)], [performed(SUPINO, 0, 90, 12)]));

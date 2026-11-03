@@ -12,6 +12,9 @@
   /* Text */
   --text: #edeff2;
   --text-muted: #8a919b;
+  /* A suggestion is dimmer than text but still a numeral: 8.0:1 on surface-1,
+     7.1:1 on surface-2, above the 7:1 floor. */
+  --text-suggestion: #a7aeb8;
 
   /* Accents: violet is interaction only, magenta is data only. */
   --accent-interaction: #b26bff;

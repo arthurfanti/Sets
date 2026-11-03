@@ -87,6 +87,29 @@
   text-align: left;
 }
 
+.added {
+  display: grid;
+  flex: 1;
+  gap: var(--space-1);
+  min-height: var(--target);
+  align-content: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.pickName {
+  color: var(--text-muted);
+  font-size: var(--text-row);
+  font-weight: 600;
+}
+
+.addedNote {
+  color: var(--text-muted);
+  font-size: var(--text-label);
+}
+
 .more {
   flex: none;
   width: var(--target);

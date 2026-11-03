@@ -1,5 +1,5 @@
 import type { SetsDb } from "@/db/database";
-import { getDatabase } from "@/db/repositories";
+import { readyDatabase } from "@/db/database";
 
 let persistenceRequest: Promise<boolean> | undefined;
 
@@ -45,7 +45,7 @@ async function withDatabase<T>(
   work: (db: SetsDb) => Promise<T>,
 ): Promise<T> {
   if (database) return work(database);
-  return work(await getDatabase());
+  return work(await readyDatabase());
 }
 
 export async function readStorageSummary(database?: SetsDb): Promise<StorageSummary> {

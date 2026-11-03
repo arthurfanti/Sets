@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { formatNumber } from "@/ui/format";
 import styles from "./SetRow.module.css";
 
 export interface SetRowProps {
@@ -28,7 +29,7 @@ export function parseReps(text: string): number | null {
 }
 
 function toText(value: number | null): string {
-  return value === null ? "" : String(value).replace(".", ",");
+  return value === null ? "" : formatNumber(value);
 }
 
 /**

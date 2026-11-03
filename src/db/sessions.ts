@@ -1,6 +1,6 @@
 import { readyDatabase, type SetsDb } from "@/db/database";
 import type { PerformedSet, Prescription, Session } from "@/domain";
-import { applySet, lastActivityAt } from "@/domain/session";
+import { applySet, lastActivityAt, uniquePlan } from "@/domain/session";
 
 /**
  * Session persistence. A Session is one document: its Plan and every Set it
@@ -100,7 +100,9 @@ export async function startSession(routineId: string, database?: SetsDb): Promis
   const routine = await db.get("routines", routineId);
   if (!routine) throw new MissingRoutineError(routineId);
 
-  const plan = routine.prescriptions.map((prescription): Prescription => ({ ...prescription }));
+  const plan = uniquePlan(
+    routine.prescriptions.map((prescription): Prescription => ({ ...prescription })),
+  );
   return createSession(db, routineId, plan);
 }
 

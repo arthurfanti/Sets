@@ -22,6 +22,22 @@ export interface Prefill {
   source: PrefillSource;
 }
 
+/**
+ * One block per Exercise, keeping the first prescription. A Session keys a Set
+ * by `exerciseId` and slot index, so two blocks of the same Exercise would
+ * share slots and the second confirmation would overwrite the first. The
+ * editor refuses the duplicate; this protects a Session made from a Routine
+ * that acquired one another way.
+ */
+export function uniquePlan(plan: readonly Prescription[]): Prescription[] {
+  const seen = new Set<string>();
+  return plan.filter((prescription) => {
+    if (seen.has(prescription.exerciseId)) return false;
+    seen.add(prescription.exerciseId);
+    return true;
+  });
+}
+
 /** Expands a Plan into one slot per prescribed Set, indexed per Exercise. */
 export function planSlots(plan: Prescription[]): Slot[] {
   return plan.flatMap((prescription) =>
@@ -48,11 +64,10 @@ export function prefillSlot(
 ): Prefill {
   const candidates = history
     .filter((session) => session.endedAt !== undefined)
-    .filter(
-      (session) =>
-        session.plan.some((row) => row.exerciseId === exerciseId) ||
-        session.sets.some((set) => set.exerciseId === exerciseId),
-    )
+    // Only a Session that actually logged this Exercise is a candidate. A
+    // merely prescribed one has nothing to lend and would otherwise spend one
+    // of the five slots, hiding a real earlier Session.
+    .filter((session) => session.sets.some((set) => set.exerciseId === exerciseId))
     .sort((a, b) => b.startedAt - a.startedAt)
     .slice(0, PREFILL_WALK_BACK);
 

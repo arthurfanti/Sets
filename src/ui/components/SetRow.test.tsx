@@ -30,6 +30,14 @@ describe("SetRow", () => {
     expect(screen.getByRole("button", { name: "Confirmar série 1 de Supino reto" })).toBeTruthy();
   });
 
+  it("renders a fractional suggestion with a comma", () => {
+    render(
+      <SetRow {...labels} weight={92.5} reps={8} prefilled active={false} confirmed={false} />,
+    );
+
+    expect(weightInput().value).toBe("92,5");
+  });
+
   it("flips the typed values to full contrast and confirms the exact numbers", async () => {
     const user = userEvent.setup();
     const onConfirm = vi.fn(async () => undefined);

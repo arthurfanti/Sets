@@ -23,8 +23,9 @@ import {
   type Slot,
   setKey,
 } from "@/domain/session";
-import { AddExerciseSheet } from "@/ui/components/AddExerciseSheet";
+import { ExercisePicker } from "@/ui/components/ExercisePicker";
 import { SetRow } from "@/ui/components/SetRow";
+import { formatKg } from "@/ui/format";
 import styles from "./SessionScreen.module.css";
 
 interface LiveData {
@@ -144,9 +145,9 @@ export function SessionScreen() {
   }
 
   /**
-   * Finish ends the Session at its last logged Set, then returns Home. A Set
-   * still held in memory refuses the close: the Session stays open and the bar
-   * keeps saying the Sets are unsaved, rather than losing them on the way out.
+   * Finish ends the Session at its last logged Set and stays on it. The
+   * finished screen is where the Exercise pages live, so the reward for
+   * logging stays one tap away instead of being replaced by Home.
    */
   async function finish(sessionId: string) {
     setBusy(true);
@@ -158,8 +159,13 @@ export function SessionScreen() {
         setNotice("Sessão não salva.");
         return;
       }
-      await finishSession(sessionId);
-      navigate("/", { replace: true });
+      const ended = await finishSession(sessionId);
+      setState((previous) => {
+        if (previous.kind === "live" || previous.kind === "stale") {
+          return { kind: "finished", session: ended, exercises: previous.data.exercises };
+        }
+        return previous;
+      });
     } catch {
       setBusy(false);
       setNotice("Não foi possível finalizar a sessão.");
@@ -202,15 +208,20 @@ export function SessionScreen() {
     setNotice(result.saved ? `Série ${slot.index + 1} de ${exerciseName} confirmada.` : null);
   }
 
-  async function pickExercise(data: LiveData, exerciseId: string) {
+  async function pickExercise(data: LiveData, exercise: Exercise) {
     setPicking(false);
     try {
-      const updated = await addExerciseToSession(data.session.id, exerciseId);
-      setState((previous) =>
-        previous.kind === "live"
-          ? { ...previous, data: { ...previous.data, session: updated } }
-          : previous,
-      );
+      const updated = await addExerciseToSession(data.session.id, exercise.id);
+      setState((previous) => {
+        if (previous.kind !== "live") return previous;
+        const exercises = previous.data.exercises.some((row) => row.id === exercise.id)
+          ? previous.data.exercises
+          : [...previous.data.exercises, exercise];
+        return {
+          ...previous,
+          data: { ...previous.data, session: updated, exercises },
+        };
+      });
     } catch {
       setNotice("Não foi possível adicionar o exercício.");
     }
@@ -342,7 +353,7 @@ export function SessionScreen() {
 
       <p className={styles.meta}>
         {data.session.plan.length === 0
-          ? "Nenhum exercício no Plano."
+          ? "Nenhum exercício no Plano. Adicione um exercício para registrar séries."
           : "Séries pré-preenchidas com o que você fez da última vez."}
       </p>
 
@@ -412,11 +423,10 @@ export function SessionScreen() {
       </footer>
 
       {picking ? (
-        <AddExerciseSheet
-          exercises={data.exercises}
-          exclude={data.session.plan.map((row) => row.exerciseId)}
+        <ExercisePicker
+          added={data.session.plan.map((row) => row.exerciseId)}
           onClose={() => setPicking(false)}
-          onPick={(exerciseId) => void pickExercise(data, exerciseId)}
+          onPick={(exercise) => void pickExercise(data, exercise)}
         />
       ) : null}
 
@@ -442,7 +452,7 @@ function WriteWarning() {
 function describe(prescription: Prescription): string {
   const parts = [`${prescription.sets} ${prescription.sets === 1 ? "série" : "séries"}`];
   if (prescription.reps !== "") parts.push(`${prescription.reps} reps`);
-  if (prescription.weight !== undefined) parts.push(`${prescription.weight} kg`);
+  if (prescription.weight !== undefined) parts.push(formatKg(prescription.weight));
   return parts.join(" · ");
 }
 

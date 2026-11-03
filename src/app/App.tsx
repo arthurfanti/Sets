@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { updateController } from "@/app/pwa";
 import { router } from "@/app/router";
-import { readyDatabase } from "@/db/database";
 import { type OpenFailureCause, openFailureCause } from "@/db/open-failure";
+import { getDatabase } from "@/db/repositories";
 import { UpdateBanner } from "@/ui/components/UpdateBanner";
 import { GateScreen } from "@/ui/screens/GateScreen";
 
@@ -20,7 +20,7 @@ export function App() {
     setOpen(false);
     setFailure(null);
     try {
-      await readyDatabase();
+      await getDatabase();
       setOpen(true);
     } catch (error) {
       setFailure(openFailureCause(error));

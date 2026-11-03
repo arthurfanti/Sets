@@ -1,4 +1,4 @@
-import type { StorageSummary } from "@/db/storage";
+import type { StorageSummary } from "@/db/repositories";
 
 /** The one sentence the About view must never soften. */
 export const NO_BACKUP_SENTENCE =

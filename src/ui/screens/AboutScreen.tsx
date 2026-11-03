@@ -4,7 +4,7 @@ import {
   isStoragePersisted,
   readStorageSummary,
   type StorageSummary,
-} from "@/db/storage";
+} from "@/db/repositories";
 import { confirmsDeletion } from "@/ui/confirmation";
 import { Placeholder } from "@/ui/Placeholder";
 import packageJson from "../../../package.json";

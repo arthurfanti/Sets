@@ -10,6 +10,18 @@ export function getDatabase(): Promise<SetsDb> {
   return readyDatabase();
 }
 
+/**
+ * Storage and persistence live behind this module too: the UI has one door to
+ * the database, and it is a repository.
+ */
+export {
+  deleteEverything,
+  isStoragePersisted,
+  readStorageSummary,
+  requestPersistentStorage,
+  type StorageSummary,
+} from "@/db/storage";
+
 /** Built-in Routines keep the order the bundle declares them in. */
 const builtInOrder = new Map(
   (routineSeed as { slug: string }[]).map((row, index) => [row.slug, index]),
