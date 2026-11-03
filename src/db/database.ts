@@ -1,6 +1,7 @@
 import { type DBSchema, type IDBPDatabase, openDB } from "idb";
 import exerciseSeed from "@/data/exercises.json";
 import routineSeed from "@/data/routines.json";
+import { DatabaseOpenError, toOpenFailure } from "@/db/open-failure";
 import type { Exercise, MuscleGroup, Prescription, Routine, Session } from "@/domain";
 
 /** Bump when the bundled seed changes and the new rows should reach devices. */
@@ -16,6 +17,49 @@ export interface SetsDatabase extends DBSchema {
 }
 
 export type SetsDb = IDBPDatabase<SetsDatabase>;
+
+let ready: Promise<SetsDb> | undefined;
+
+/**
+ * The one connection the app uses: opened and seeded on first call, then
+ * reused. Tests bypass this and pass their own database into the repositories.
+ */
+export function readyDatabase(): Promise<SetsDb> {
+  ready ??= openReadyDatabase().catch((error: unknown) => {
+    // A refused open must be retryable: "Tentar de novo" on the gate opens
+    // again instead of replaying the stored rejection.
+    ready = undefined;
+    throw toOpenFailure(error);
+  });
+  return ready;
+}
+
+async function openReadyDatabase(): Promise<SetsDb> {
+  const database = await openDatabase();
+  try {
+    await seedDatabase(database);
+  } catch (error) {
+    database.close();
+    throw error;
+  }
+  return database;
+}
+
+/**
+ * Drops the cached connection so the next `readyDatabase` opens again. The
+ * destructive reset calls this before deleting: a live connection makes the
+ * delete block until the tab closes.
+ */
+export async function forgetDatabase(): Promise<void> {
+  const pending = ready;
+  ready = undefined;
+  if (!pending) return;
+  try {
+    (await pending).close();
+  } catch {
+    // An open that never succeeded holds nothing to close.
+  }
+}
 
 interface SeedExercise {
   slug: string;
@@ -40,16 +84,34 @@ interface SeedRoutine {
 const exercises = exerciseSeed as SeedExercise[];
 const routines = routineSeed as SeedRoutine[];
 
-export async function openDatabase(name: string = DATABASE_NAME): Promise<SetsDb> {
-  return openDB<SetsDatabase>(name, 1, {
-    upgrade(database) {
-      database.createObjectStore("exercises", { keyPath: "id" }).createIndex("by-name", "name");
-      database.createObjectStore("routines", { keyPath: "id" });
-      database
-        .createObjectStore("sessions", { keyPath: "id" })
-        .createIndex("by-startedAt", "startedAt");
-      database.createObjectStore("meta");
-    },
+export function openDatabase(name: string = DATABASE_NAME): Promise<SetsDb> {
+  return new Promise((resolve, reject) => {
+    let abandoned = false;
+    const request = openDB<SetsDatabase>(name, 1, {
+      upgrade(database) {
+        database.createObjectStore("exercises", { keyPath: "id" }).createIndex("by-name", "name");
+        database.createObjectStore("routines", { keyPath: "id" });
+        database
+          .createObjectStore("sessions", { keyPath: "id" })
+          .createIndex("by-startedAt", "startedAt");
+        database.createObjectStore("meta");
+      },
+      // Another tab holds an older connection, so the version change cannot
+      // proceed. The gate names that cause and asks the Lifter to close it.
+      blocked() {
+        abandoned = true;
+        reject(new DatabaseOpenError("blocked"));
+      },
+    });
+    request.then(
+      (database) => {
+        // A blocked open can still finish after we gave up. Close it rather
+        // than leave a connection in the way of the next retry.
+        if (abandoned) database.close();
+        else resolve(database);
+      },
+      (error: unknown) => reject(toOpenFailure(error)),
+    );
   });
 }
 

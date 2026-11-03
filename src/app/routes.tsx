@@ -1,4 +1,5 @@
 import type { RouteObject } from "react-router-dom";
+import { AboutScreen } from "@/ui/screens/AboutScreen";
 import { ExerciseScreen } from "@/ui/screens/ExerciseScreen";
 import { HistoryScreen } from "@/ui/screens/HistoryScreen";
 import { HomeScreen } from "@/ui/screens/HomeScreen";
@@ -6,7 +7,7 @@ import { RoutineEditorScreen } from "@/ui/screens/RoutineEditorScreen";
 import { SessionScreen } from "@/ui/screens/SessionScreen";
 
 /**
- * The five routes. Hash routing is deliberate: it exists so the phone's back
+ * The six routes. Hash routing is deliberate: it exists so the phone's back
  * gesture returns to the previous screen instead of leaving the app, and it
  * keeps the deploy free of any server-side rewrite rule.
  *
@@ -19,4 +20,5 @@ export const routes: RouteObject[] = [
   { path: "/rotina/:id", element: <RoutineEditorScreen /> },
   { path: "/historico", element: <HistoryScreen /> },
   { path: "/exercicio/:id", element: <ExerciseScreen /> },
+  { path: "/sobre", element: <AboutScreen /> },
 ];

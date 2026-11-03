@@ -1,0 +1,72 @@
+.stepper {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: var(--target) 1fr var(--target);
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.button {
+  width: var(--target);
+  height: var(--target);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.button:disabled {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.value {
+  color: var(--text);
+  font-size: var(--text-hero);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.unit {
+  margin-left: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  font-weight: 400;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  text-align: center;
+}
+
+fieldset.stepper {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+legend.label {
+  padding: 0;
+}

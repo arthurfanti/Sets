@@ -8,10 +8,10 @@ export default defineConfig({
     react(),
     VitePWA({
       // "prompt" keeps a new build waiting instead of swapping the screen out
-      // mid-Session. Ticket #9 surfaces the banner; until then the worker simply
-      // waits and the old build keeps running.
+      // mid-Session, and `virtual:pwa-register` reads the waiting worker so the
+      // app decides when it is applied. Registration is the module's job only.
       registerType: "prompt",
-      injectRegister: "auto",
+      injectRegister: false,
       manifest: {
         name: "Sets",
         short_name: "Sets",

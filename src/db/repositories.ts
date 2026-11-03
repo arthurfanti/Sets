@@ -1,18 +1,26 @@
 import routineSeed from "@/data/routines.json";
-import { openDatabase, type SetsDb, seedDatabase } from "@/db/database";
+import { readyDatabase, type SetsDb } from "@/db/database";
 import type { Exercise, Routine } from "@/domain";
 
-let ready: Promise<SetsDb> | undefined;
-
-/** Opens the database once and seeds it, then reuses the handle for the session. */
-function defaultDatabase(): Promise<SetsDb> {
-  ready ??= (async () => {
-    const database = await openDatabase();
-    await seedDatabase(database);
-    return database;
-  })();
-  return ready;
+/**
+ * The session-wide handle, seeded. Storage reads and the one destructive clear
+ * go through it too, so About never sees a connection that skipped the seed.
+ */
+export function getDatabase(): Promise<SetsDb> {
+  return readyDatabase();
 }
+
+/**
+ * Storage and persistence live behind this module too: the UI has one door to
+ * the database, and it is a repository.
+ */
+export {
+  deleteEverything,
+  isStoragePersisted,
+  readStorageSummary,
+  requestPersistentStorage,
+  type StorageSummary,
+} from "@/db/storage";
 
 /** Built-in Routines keep the order the bundle declares them in. */
 const builtInOrder = new Map(
@@ -38,18 +46,18 @@ function compareRoutines(a: Routine, b: Routine): number {
 }
 
 export async function listRoutines(database?: SetsDb): Promise<Routine[]> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   const all = await db.getAll("routines");
   return all.sort(compareRoutines);
 }
 
 export async function listExercises(database?: SetsDb): Promise<Exercise[]> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   return db.getAll("exercises");
 }
 
 /** Zero is the first-run signal: nothing has been trained yet. */
 export async function countSessions(database?: SetsDb): Promise<number> {
-  const db = database ?? (await defaultDatabase());
+  const db = database ?? (await readyDatabase());
   return db.count("sessions");
 }

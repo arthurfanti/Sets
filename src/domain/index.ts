@@ -33,6 +33,11 @@ export interface Exercise {
   /** Seeded short forms, matched by search and never displayed. */
   aliases?: string[];
   source: Source;
+  /**
+   * When the Lifter hid this Exercise. Hidden rows leave the picker but stay
+   * resolvable, because the Sets that named them still have to render.
+   */
+  hiddenAt?: number;
 }
 
 /** One Exercise in a Routine, with what it prescribes. */
@@ -55,6 +60,12 @@ export interface Routine {
 /** One performed effort. */
 export interface PerformedSet {
   exerciseId: string;
+  /**
+   * The Set's slot within its Exercise block, zero-based. Stored so a slot can
+   * find "what I did at this index last time" without depending on array order.
+   * Records written before this field existed derive it from their order.
+   */
+  index: number;
   weight: number;
   reps: number;
   confirmedAt: number;

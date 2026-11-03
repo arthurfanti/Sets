@@ -16,6 +16,7 @@ The lifter is standing at a rack with a bar loaded, sweaty hands, and 90 seconds
 | `border` | `rgba(255,255,255,0.08)` | 1px separators, button outlines |
 | `text` | `#EDEFF2` | all text and all numbers |
 | `text-muted` | `#8A919B` | labels, secondary stats, placeholders |
+| `text-suggestion` | `#A7AEB8` | pre-filled Set values: dimmer than `text`, still ≥7:1 |
 | `violet` | `#B26BFF` | **interaction only** |
 | `magenta` | `#F72585` | **data only** |
 
@@ -23,7 +24,7 @@ Hard colour rules:
 
 - **Violet** marks only: the Set currently being logged (a 3px left bar on its row, and the primary button), and the focus ring. Nothing else is violet. Never a large violet background fill behind body text.
 - **Magenta** appears only inside charts: the estimated 1RM line and the Best Set dot.
-- **No accent colour ever sits behind a weight or rep numeral.** Numerals are always `text` on `bg`/`surface-1`.
+- **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.0:1 on `surface-1`, 7.1:1 on `surface-2`) so a guess looks dimmer than a logged Set.
 - No gradients between the two accents.
 - No shadows, no blur, no glass. Separation is a 1px border plus one step of the surface ramp.
 - Contrast floor: body text ≥4.5:1, every numeral ≥7:1.

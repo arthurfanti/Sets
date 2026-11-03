@@ -20,13 +20,20 @@
 }
 
 .row {
+  flex: 1;
   display: grid;
   gap: var(--space-1);
+  min-width: 0;
   min-height: var(--target);
   padding: var(--space-3) var(--space-4);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
   border-radius: var(--radius);
+}
+
+.row:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: -2px;
 }
 
 .name {
@@ -52,4 +59,103 @@
   margin: 0 0 var(--space-5);
   color: var(--text-muted);
   font-size: var(--text-meta);
+}
+
+.rowItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.resume {
+  display: flex;
+  min-height: var(--target);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.resume:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.edit {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding-inline: var(--space-3) var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  text-decoration: none;
+}
+
+.edit:hover {
+  color: var(--text);
+}
+
+.edit:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: -2px;
+}
+
+.primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--action-height);
+  margin-top: var(--space-2);
+  background: var(--accent-interaction);
+  border-radius: var(--radius);
+  color: var(--bg);
+  font-size: var(--text-body);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.resumeLabel {
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.resumeAction {
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.links {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.about {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  text-decoration: none;
+}
+
+.about:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }

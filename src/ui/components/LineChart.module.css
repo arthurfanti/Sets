@@ -1,0 +1,47 @@
+.chart {
+  position: relative;
+  margin: 0;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Magenta is the data accent: the line and its dots, nothing else. */
+.line {
+  fill: none;
+  stroke: var(--accent-data);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.dot {
+  fill: var(--accent-data);
+}
+
+.summary {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ticks {
+  display: flex;
+  justify-content: space-between;
+  padding-top: var(--space-1);
+}
+
+.tick {
+  color: var(--text-muted);
+  font-size: var(--text-label);
+}
