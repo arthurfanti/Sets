@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createUpdateController } from "@/app/update";
+import { announceExistingWaiting, createUpdateController } from "@/app/update";
 
 /**
  * The controller is the whole update policy, so it is tested where the app
@@ -137,5 +137,26 @@ describe("applying an update", () => {
     await Promise.all([applying, again]);
     expect(deps.applyUpdate).toHaveBeenCalledTimes(1);
     expect(deps.controller.getState()).toEqual({ kind: "applying" });
+  });
+});
+
+describe("announcing a worker that was already waiting", () => {
+  it("announces when the registration already has a waiting worker", async () => {
+    const announced: string[] = [];
+    const controller = { announce: async () => void announced.push("announce") };
+
+    await announceExistingWaiting(controller, { waiting: {} } as ServiceWorkerRegistration);
+
+    expect(announced).toEqual(["announce"]);
+  });
+
+  it("stays quiet when nothing is waiting", async () => {
+    const announced: string[] = [];
+    const controller = { announce: async () => void announced.push("announce") };
+
+    await announceExistingWaiting(controller, { waiting: null } as ServiceWorkerRegistration);
+    await announceExistingWaiting(controller, undefined);
+
+    expect(announced).toEqual([]);
   });
 });

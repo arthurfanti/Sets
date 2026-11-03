@@ -39,6 +39,19 @@ export interface UpdateController {
   subscribe(listener: () => void): () => void;
 }
 
+/**
+ * A worker that started waiting *before* this page loaded never fires the
+ * worker's "need refresh" callback — that callback reports an install this page
+ * watched. Without this check, a deploy that landed while the app was closed
+ * leaves the Lifter on an old build with no way to learn about it.
+ */
+export async function announceExistingWaiting(
+  controller: Pick<UpdateController, "announce">,
+  registration: Pick<ServiceWorkerRegistration, "waiting"> | undefined | null,
+): Promise<void> {
+  if (registration?.waiting) await controller.announce();
+}
+
 export function createUpdateController(dependencies: UpdateDependencies): UpdateController {
   const listeners = new Set<() => void>();
 
