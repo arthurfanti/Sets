@@ -319,3 +319,16 @@ export async function listFinishedSessions(database?: SetsDb): Promise<Session[]
     .sort((a, b) => b.startedAt - a.startedAt)
     .map(readSession);
 }
+
+/**
+ * The finished Sessions that recorded one Exercise, newest first — the only
+ * read the Exercise page needs. An open Session is not progress yet, so it is
+ * left out just as it is left out of history.
+ */
+export async function listExerciseSessions(
+  exerciseId: string,
+  database?: SetsDb,
+): Promise<Session[]> {
+  const finished = await listFinishedSessions(database);
+  return finished.filter((session) => session.sets.some((set) => set.exerciseId === exerciseId));
+}

@@ -12,6 +12,7 @@ import {
   findActiveSession,
   finishSession,
   getSession,
+  listExerciseSessions,
   listFinishedSessions,
   MissingSessionError,
   MissingSetError,
@@ -425,5 +426,62 @@ describe("an Exercise that left the picker", () => {
     expect(finished?.sets[0]?.exerciseId).toBe(exercise.id);
     const names = new Map((await listExercises(db)).map((row) => [row.id, row.name]));
     expect(names.get(finished?.sets[0]?.exerciseId ?? "")).toBe("Rosca Scott unilateral");
+  });
+});
+
+describe("listExerciseSessions", () => {
+  it("reads only the finished Sessions that recorded the Exercise, newest first", async () => {
+    const finishedOld = {
+      id: "ses_velha",
+      routineId: null,
+      startedAt: 1_000,
+      endedAt: 2_000,
+      plan: [],
+      sets: [
+        { exerciseId: "supino-reto", index: 0, weight: 100, reps: 5, confirmedAt: 1_500 },
+        { exerciseId: "agachamento", index: 0, weight: 140, reps: 5, confirmedAt: 1_600 },
+      ],
+    };
+    const finishedNew = {
+      id: "ses_nova",
+      routineId: null,
+      startedAt: 3_000,
+      endedAt: 4_000,
+      plan: [],
+      sets: [{ exerciseId: "supino-reto", index: 0, weight: 95, reps: 8, confirmedAt: 3_500 }],
+    };
+    const otherExercise = {
+      id: "ses_outra",
+      routineId: null,
+      startedAt: 5_000,
+      endedAt: 6_000,
+      plan: [],
+      sets: [{ exerciseId: "agachamento", index: 0, weight: 150, reps: 5, confirmedAt: 5_500 }],
+    };
+    const open = {
+      id: "ses_aberta",
+      routineId: null,
+      startedAt: 7_000,
+      plan: [],
+      sets: [{ exerciseId: "supino-reto", index: 0, weight: 110, reps: 3, confirmedAt: 7_500 }],
+    };
+    await db.put("sessions", finishedOld);
+    await db.put("sessions", finishedNew);
+    await db.put("sessions", otherExercise);
+    await db.put("sessions", open);
+
+    const sessions = await listExerciseSessions("supino-reto", db);
+
+    expect(sessions.map((session) => session.id)).toEqual(["ses_nova", "ses_velha"]);
+    expect(sessions.flatMap((session) => session.sets).map((set) => set.exerciseId)).toEqual([
+      "supino-reto",
+      "supino-reto",
+      "agachamento",
+    ]);
+    expect(sessions[1]?.sets[1]?.index).toBe(0);
+  });
+
+  it("returns nothing for an Exercise with no recorded Sets", async () => {
+    expect(await listExerciseSessions("nunca-feito", db)).toEqual([]);
   });
 });
