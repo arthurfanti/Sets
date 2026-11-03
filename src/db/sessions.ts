@@ -40,6 +40,14 @@ export class MissingRoutineError extends Error {
   }
 }
 
+/** A correction named a Set the Session never recorded. */
+export class MissingSetError extends Error {
+  constructor(exerciseId: string, index: number) {
+    super(`Set ${index} of ${exerciseId} was not found.`);
+    this.name = "MissingSetError";
+  }
+}
+
 function isOpen(session: Session): boolean {
   return session.endedAt === undefined;
 }
@@ -238,6 +246,74 @@ export async function finishSession(sessionId: string, database?: SetsDb): Promi
 export async function discardSession(sessionId: string, database?: SetsDb): Promise<void> {
   const db = database ?? (await readyDatabase());
   await db.delete("sessions", sessionId);
+}
+
+/** A correction for one recorded Set: which Set, and the values it should hold. */
+export interface SetCorrection {
+  exerciseId: string;
+  index: number;
+  weight: number;
+  reps: number;
+}
+
+/**
+ * Corrects a typo in a recorded Set's weight or reps. Only those two values
+ * move: the Set keeps its slot and the moment it was recorded, and the Session
+ * keeps its start, because progress is read from when the effort happened, not
+ * from when the Lifter fixed the number.
+ */
+export async function updateSet(
+  sessionId: string,
+  correction: SetCorrection,
+  database?: SetsDb,
+): Promise<Session> {
+  const db = database ?? (await readyDatabase());
+  const tx = db.transaction("sessions", "readwrite");
+  const session = await tx.store.get(sessionId);
+  if (!session) {
+    abort(tx);
+    throw new MissingSessionError(sessionId);
+  }
+
+  const sets = withIndexes(session.sets);
+  const recorded = sets.find(
+    (set) => set.exerciseId === correction.exerciseId && set.index === correction.index,
+  );
+  if (!recorded) {
+    abort(tx);
+    throw new MissingSetError(correction.exerciseId, correction.index);
+  }
+
+  const corrected: Session = {
+    ...session,
+    sets: sets.map((set) =>
+      set === recorded ? { ...set, weight: correction.weight, reps: correction.reps } : set,
+    ),
+  };
+  await tx.store.put(corrected);
+  await tx.done;
+  return readSession(corrected);
+}
+
+/**
+ * Removes a finished Session from history. Its Sets go with it, so it stops
+ * counting toward volume; an open Session is not history and is never touched
+ * from here.
+ */
+export async function deleteFinishedSession(sessionId: string, database?: SetsDb): Promise<void> {
+  const db = database ?? (await readyDatabase());
+  const tx = db.transaction("sessions", "readwrite");
+  const session = await tx.store.get(sessionId);
+  if (!session) {
+    abort(tx);
+    throw new MissingSessionError(sessionId);
+  }
+  if (session.endedAt === undefined) {
+    abort(tx);
+    throw new Error(`Session ${sessionId} is still open and cannot be deleted from history.`);
+  }
+  await tx.store.delete(sessionId);
+  await tx.done;
 }
 
 /** Every ended Session, newest first — the pool pre-fill walks back through. */
