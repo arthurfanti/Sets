@@ -378,6 +378,12 @@ interface DeleteDialogProps {
 
 /** Deleting is irreversible, so the dialog names what disappears. */
 function DeleteDialog({ busy, title, date, onCancel, onConfirm }: DeleteDialogProps) {
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    cancelRef.current?.focus();
+  }, []);
+
   return (
     <div className={styles.overlay}>
       <div
@@ -400,7 +406,13 @@ function DeleteDialog({ busy, title, date, onCancel, onConfirm }: DeleteDialogPr
           <button type="button" className={styles.confirm} onClick={onConfirm} disabled={busy}>
             {busy ? "Apagando…" : "Apagar sessão"}
           </button>
-          <button type="button" className={styles.secondary} onClick={onCancel} disabled={busy}>
+          <button
+            type="button"
+            className={styles.secondary}
+            onClick={onCancel}
+            disabled={busy}
+            ref={cancelRef}
+          >
             Cancelar
           </button>
         </div>
