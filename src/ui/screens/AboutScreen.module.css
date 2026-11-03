@@ -1,0 +1,166 @@
+.identity {
+  margin-bottom: var(--space-5);
+}
+
+.appName {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--text-title);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.version {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.state {
+  margin: 0 0 var(--space-2);
+  color: var(--text);
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+
+.counts {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+.warning {
+  margin: 0 0 var(--space-5);
+  color: var(--text);
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+.muted {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.danger {
+  display: block;
+  width: 100%;
+  min-height: var(--target);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-body);
+  font-weight: 600;
+  text-align: left;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.danger:disabled {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(0 0 0 / 64%);
+}
+
+.dialog {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-5);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.dialogTitle {
+  margin: 0 0 var(--space-3);
+  color: var(--text);
+  font-size: var(--text-title);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.dialogBody {
+  margin: 0 0 var(--space-4);
+  color: var(--text);
+  font-size: var(--text-body);
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-meta);
+}
+
+.input {
+  display: block;
+  width: 100%;
+  min-height: var(--target);
+  margin-bottom: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-body);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent-interaction);
+  outline-offset: 2px;
+}
+
+.error {
+  margin: 0 0 var(--space-3);
+  color: var(--text);
+  font-size: var(--text-meta);
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.confirm {
+  min-height: var(--action-height);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-body);
+  font-weight: 600;
+  background: var(--surface-1);
+  border: 1px solid var(--text-muted);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.confirm:disabled {
+  color: var(--text-muted);
+  border-color: var(--border);
+  cursor: default;
+}
+
+.cancel {
+  min-height: var(--target);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: var(--text-body);
+  background: none;
+  border: none;
+  cursor: pointer;
+}

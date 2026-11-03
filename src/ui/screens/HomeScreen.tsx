@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { countSessions, listExercises, listRoutines } from "@/db/repositories";
 import type { Exercise, Routine } from "@/domain";
 import { Placeholder } from "@/ui/Placeholder";
@@ -65,6 +66,10 @@ export function HomeScreen() {
         nameOf={nameOf}
         emptyText="Nenhuma rotina sua ainda."
       />
+
+      <Link to="/sobre" className={styles.about}>
+        Sobre
+      </Link>
     </Placeholder>
   );
 }
