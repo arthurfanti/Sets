@@ -53,10 +53,16 @@
   font-size: var(--text-body);
   font-weight: 600;
   text-align: left;
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   cursor: pointer;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .danger:disabled {
@@ -163,4 +169,12 @@
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.danger:hover {
+  border-color: rgb(178 107 255 / 40%);
+}
+
+.danger:active {
+  transform: scale(0.99);
 }

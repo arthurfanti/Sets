@@ -7,12 +7,18 @@
   width: 100%;
   min-height: var(--target);
   padding: 0 var(--space-3);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   color: var(--text);
   font-family: inherit;
   font-size: var(--text-row);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .search:focus-visible,
@@ -34,12 +40,18 @@
   width: 100%;
   min-height: var(--target);
   padding: 0 var(--space-3);
-  background: var(--surface-1);
+  background: var(--card-bg);
   border: 1px dashed var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
   color: var(--text);
   font-size: var(--text-body);
   text-align: left;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .group {
@@ -78,13 +90,19 @@
   flex: 1;
   min-height: var(--target);
   padding: var(--space-2) var(--space-3);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   color: var(--text);
   font-size: var(--text-row);
   font-weight: 600;
   text-align: left;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .added {
@@ -94,9 +112,15 @@
   min-height: var(--target);
   align-content: center;
   padding: var(--space-2) var(--space-3);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .pickName {
@@ -114,20 +138,64 @@
   flex: none;
   width: var(--target);
   height: var(--target);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   color: var(--text-muted);
   font-size: var(--text-body);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .action {
   min-height: var(--target);
   padding: 0 var(--space-3);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   color: var(--text);
   font-size: var(--text-body);
   text-align: left;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.create:hover {
+  border-color: rgb(178 107 255 / 40%);
+}
+
+.create:active {
+  transform: scale(0.99);
+}
+
+.pick:hover {
+  border-color: rgb(178 107 255 / 40%);
+}
+
+.pick:active {
+  transform: scale(0.99);
+}
+
+.more:hover {
+  border-color: rgb(178 107 255 / 40%);
+}
+
+.more:active {
+  transform: scale(0.99);
+}
+
+.action:hover {
+  border-color: rgb(178 107 255 / 40%);
+}
+
+.action:active {
+  transform: scale(0.99);
 }

@@ -96,9 +96,15 @@
 }
 
 .card {
-  background: var(--surface-1);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
 }
 
 .row {
@@ -358,4 +364,12 @@
 .confirm:disabled,
 .secondary:disabled {
   opacity: 0.5;
+}
+
+.card:hover {
+  border-color: rgb(178 107 255 / 40%);
+}
+
+.card:active {
+  transform: scale(0.99);
 }
