@@ -4,21 +4,25 @@
 
 :root {
   /* Surfaces */
-  --bg: #0b0d10;
-  --surface-1: #14171c;
-  --surface-2: #1d222a;
+  --bg: #111317;
+  --surface-1: #1e2023;
+  --surface-2: #282a2d;
   --border: rgb(255 255 255 / 8%);
 
   /* Text */
-  --text: #edeff2;
-  --text-muted: #8a919b;
+  --text: #e2e2e6;
+  --text-muted: #a7aeb8;
   /* A suggestion is dimmer than text but still a numeral: 8.0:1 on surface-1,
      7.1:1 on surface-2, above the 7:1 floor. */
   --text-suggestion: #a7aeb8;
 
-  /* Accents: violet is interaction only, magenta is data only. */
-  --accent-interaction: #b26bff;
-  --accent-data: #f72585;
+  /* Accents: primary is interaction only, amber is data only. */
+  --accent-interaction: #dbb8ff;
+  --accent-data: #f1c044;
+
+  /* Filled primary button: the vivid tone, with near-black on it. */
+  --primary-fill: #b46eff;
+  --primary-fill-text: #111317;
 
   /* Spacing: 4 / 8 / 12 / 16 / 24 / 32 */
   --space-1: 4px;
@@ -29,8 +33,8 @@
   --space-6: 32px;
 
   /* Shape */
-  --radius: 12px;
-  --radius-sm: 8px;
+  --radius: 8px;
+  --radius-sm: 6px;
   --target: 48px;
   --action-height: 56px;
 

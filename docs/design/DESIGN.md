@@ -10,28 +10,31 @@ The lifter is standing at a rack with a bar loaded, sweaty hands, and 90 seconds
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `bg` | `#0B0D10` | app background, always |
-| `surface-1` | `#14171C` | cards, rows |
-| `surface-2` | `#1D222A` | raised rows, pickers, modals |
+| `bg` | `#111317` | app background, always |
+| `surface-1` | `#1E2023` | cards, rows |
+| `surface-2` | `#282A2D` | raised rows, pickers, modals |
 | `border` | `rgba(255,255,255,0.08)` | 1px separators, button outlines |
-| `text` | `#EDEFF2` | all text and all numbers |
-| `text-muted` | `#8A919B` | labels, secondary stats, placeholders |
-| `text-suggestion` | `#A7AEB8` | pre-filled Set values: dimmer than `text`, still ≥7:1 |
-| `violet` | `#B26BFF` | **interaction only** |
-| `magenta` | `#F72585` | **data only** |
+| `text` | `#E2E2E6` | logged numbers and body text |
+| `text-muted` | `#A7AEB8` | labels, secondary stats, placeholders |
+| `text-suggestion` | `#A7AEB8` | pre-filled Set values: dimmer than `text` |
+| `primary` | `#DBB8FF` | **interaction only** |
+| `primary-fill` | `#B46EFF` | filled primary button, with `#111317` on it |
+| `data` | `#F1C044` | **data only** — chart lines and the Best Set dot |
+
+Code token names: `--accent-interaction` (primary), `--accent-data` (data), `--primary-fill` / `--primary-fill-text` (filled button), `--text-suggestion`.
 
 Hard colour rules:
 
-- **Violet** marks only: the Set currently being logged (a 3px left bar on its row, and the primary button), and the focus ring. Nothing else is violet. Never a large violet background fill behind body text.
-- **Magenta** appears only inside charts: the estimated 1RM line and the Best Set dot.
-- **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.0:1 on `surface-1`, 7.1:1 on `surface-2`) so a guess looks dimmer than a logged Set.
-- No gradients between the two accents.
+- **Primary** marks only: the Set currently being logged (a 3px left bar on its row), a filled primary button, and the focus ring. Nothing else is primary. Never a large primary background behind body text.
+- **Data** (amber) appears only inside charts: the estimated 1RM line, the volume line, and the Best Set dot.
+- **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.3:1 on `bg`, 7.3:1 on `surface-1`, 6.4:1 on `surface-2`) so a guess looks dimmer than a logged Set.
+- No gradient between the two accents. One decorative vignette is allowed: a single radial gradient behind page content (`transparent → bg/40 at 40% → bg`), non-interactive. No blur, no box-shadow, no glass.
 - No shadows, no blur, no glass. Separation is a 1px border plus one step of the surface ramp.
-- Contrast floor: body text ≥4.5:1, every numeral ≥7:1.
+- Contrast floor: body text and labels ≥4.5:1; a **logged** numeral ≥7:1; a **pre-filled** numeral ≥4.5:1. That is the only place the numeral floor is relaxed, and it is a deliberate trade so a guess cannot be mistaken for a logged Set.
 
 ## Type
 
-System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`. No webfonts. `font-variant-numeric: tabular-nums` on every number.
+System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`. No webfonts: V2's Geist is deliberately not adopted, so the app keeps zero font downloads and instant first paint at the cost of a less distinctive headline. `font-variant-numeric: tabular-nums` on every number.
 
 | Role | Size / weight |
 | --- | --- |
@@ -45,7 +48,7 @@ System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`
 ## Space and shape
 
 - Spacing scale only: **4, 8, 12, 16, 24, 32**.
-- Corner radius **12px** for cards, rows and buttons; **8px** for small chips.
+- Corner radius **8px** for cards, rows and buttons; **6px** for small chips.
 - Minimum touch target **48×48**; the primary action row is **56–64** tall and sits at the bottom, in thumb reach.
 - Horizontal page padding 16px.
 

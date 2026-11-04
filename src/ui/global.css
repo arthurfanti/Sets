@@ -23,7 +23,26 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* One decorative vignette, decided in DESIGN.md: transparent at the top,
+   deepening to the background at the edges. Non-interactive, so it can never
+   eat a tap meant for a Set. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    transparent 0%,
+    rgb(17 19 23 / 40%) 40%,
+    var(--bg) 100%
+  );
+}
+
 #root {
+  position: relative;
+  z-index: 1;
   min-height: 100dvh;
 }
 

@@ -117,9 +117,9 @@
   width: 100%;
   min-height: var(--action-height);
   margin-top: var(--space-2);
-  background: var(--accent-interaction);
+  background: var(--primary-fill);
   border-radius: var(--radius);
-  color: var(--bg);
+  color: var(--primary-fill-text);
   font-size: var(--text-body);
   font-weight: 600;
   text-decoration: none;

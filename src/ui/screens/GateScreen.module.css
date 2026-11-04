@@ -40,10 +40,10 @@
 .primary {
   width: 100%;
   min-height: var(--action-height);
-  background: var(--accent-interaction);
+  background: var(--primary-fill);
   border: 0;
   border-radius: var(--radius);
-  color: var(--bg);
+  color: var(--primary-fill-text);
   font-size: var(--text-body);
   font-weight: 600;
 }

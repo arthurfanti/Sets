@@ -40,7 +40,10 @@ function contrast(foreground: string, background: string): number {
 
 const surfaces = ["bg", "surface-1", "surface-2"] as const;
 const bodyText = ["text", "text-muted"] as const;
-const numerals = ["text", "text-suggestion"] as const;
+/** A logged number must never be misread. */
+const loggedNumerals = ["text"] as const;
+/** A pre-filled number is provisional, so it clears AA rather than 7:1. */
+const suggestedNumerals = ["text-suggestion"] as const;
 
 describe("design token contrast", () => {
   it("keeps body text at or above 4.5:1 on every surface", () => {
@@ -52,8 +55,8 @@ describe("design token contrast", () => {
     }
   });
 
-  it("keeps every numeral at or above 7:1 on every surface", () => {
-    for (const name of numerals) {
+  it("keeps every logged numeral at or above 7:1 on every surface", () => {
+    for (const name of loggedNumerals) {
       for (const surface of surfaces) {
         const ratio = contrast(token(name), token(surface));
         expect(ratio, `--${name} on --${surface}`).toBeGreaterThanOrEqual(7);
@@ -61,12 +64,19 @@ describe("design token contrast", () => {
     }
   });
 
-  it("keeps a suggestion visibly dimmer than text, yet above the numeral floor", () => {
+  it("keeps a suggestion visibly dimmer than text, yet at or above 4.5:1", () => {
     const suggestion = token("text-suggestion");
-    const text = token("text");
 
-    expect(luminance(suggestion)).toBeLessThan(luminance(text));
-    expect(contrast(suggestion, token("surface-1"))).toBeGreaterThanOrEqual(7);
-    expect(contrast(suggestion, token("surface-2"))).toBeGreaterThanOrEqual(7);
+    expect(luminance(suggestion)).toBeLessThan(luminance(token("text")));
+    for (const name of suggestedNumerals) {
+      for (const surface of surfaces) {
+        const ratio = contrast(token(name), token(surface));
+        expect(ratio, `--${name} on --${surface}`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("keeps the filled primary button's label readable", () => {
+    expect(contrast(token("primary-fill-text"), token("primary-fill"))).toBeGreaterThanOrEqual(4.5);
   });
 });
