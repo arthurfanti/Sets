@@ -5,7 +5,7 @@ import { DatabaseOpenError, toOpenFailure } from "@/db/open-failure";
 import type { Exercise, MuscleGroup, Prescription, Routine, Session } from "@/domain";
 
 /** Bump when the bundled seed changes and the new rows should reach devices. */
-export const SEED_VERSION = 1;
+export const SEED_VERSION = 2;
 
 export const DATABASE_NAME = "sets";
 

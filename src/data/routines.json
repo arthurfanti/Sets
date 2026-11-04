@@ -3,46 +3,282 @@
     "slug": "rotina-a",
     "name": "Rotina A — Peito e tríceps",
     "exercises": [
-      { "exercise": "supino-reto", "sets": 4, "reps": "6-10" },
-      { "exercise": "supino-inclinado", "sets": 3, "reps": "8-12" },
-      { "exercise": "crucifixo", "sets": 3, "reps": "10-15" },
-      { "exercise": "triceps-na-polia", "sets": 3, "reps": "10-15" },
-      { "exercise": "triceps-testa", "sets": 3, "reps": "8-12" }
+      {
+        "exercise": "supino-reto",
+        "sets": 4,
+        "reps": "6-10"
+      },
+      {
+        "exercise": "supino-inclinado",
+        "sets": 3,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "crucifixo",
+        "sets": 3,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "triceps-na-polia",
+        "sets": 3,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "triceps-testa",
+        "sets": 3,
+        "reps": "8-12"
+      }
     ]
   },
   {
     "slug": "rotina-b",
     "name": "Rotina B — Costas e bíceps",
     "exercises": [
-      { "exercise": "puxada-frontal", "sets": 4, "reps": "8-12" },
-      { "exercise": "remada-curvada", "sets": 4, "reps": "6-10" },
-      { "exercise": "remada-baixa", "sets": 3, "reps": "10-12" },
-      { "exercise": "rosca-direta", "sets": 3, "reps": "8-12" },
-      { "exercise": "rosca-martelo", "sets": 3, "reps": "10-12" }
+      {
+        "exercise": "puxada-frontal",
+        "sets": 4,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "remada-curvada",
+        "sets": 4,
+        "reps": "6-10"
+      },
+      {
+        "exercise": "remada-baixa",
+        "sets": 3,
+        "reps": "10-12"
+      },
+      {
+        "exercise": "rosca-direta",
+        "sets": 3,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "rosca-martelo",
+        "sets": 3,
+        "reps": "10-12"
+      }
     ]
   },
   {
     "slug": "rotina-c",
     "name": "Rotina C — Pernas",
     "exercises": [
-      { "exercise": "agachamento-livre", "sets": 4, "reps": "6-10" },
-      { "exercise": "leg-press", "sets": 4, "reps": "8-12" },
-      { "exercise": "levantamento-terra-romeno", "sets": 3, "reps": "8-12" },
-      { "exercise": "cadeira-extensora", "sets": 3, "reps": "10-15" },
-      { "exercise": "mesa-flexora", "sets": 3, "reps": "10-15" },
-      { "exercise": "panturrilha-em-pe", "sets": 4, "reps": "12-20" }
+      {
+        "exercise": "agachamento-livre",
+        "sets": 4,
+        "reps": "6-10"
+      },
+      {
+        "exercise": "leg-press",
+        "sets": 4,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "levantamento-terra-romeno",
+        "sets": 3,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "cadeira-extensora",
+        "sets": 3,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "mesa-flexora",
+        "sets": 3,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "panturrilha-em-pe",
+        "sets": 4,
+        "reps": "12-20"
+      }
     ]
   },
   {
     "slug": "rotina-d",
     "name": "Rotina D — Ombros e abdômen",
     "exercises": [
-      { "exercise": "desenvolvimento-militar", "sets": 4, "reps": "6-10" },
-      { "exercise": "elevacao-lateral", "sets": 4, "reps": "12-15" },
-      { "exercise": "elevacao-posterior", "sets": 3, "reps": "12-15" },
-      { "exercise": "encolhimento", "sets": 3, "reps": "10-15" },
-      { "exercise": "abdominal-supra", "sets": 3, "reps": "15-20" },
-      { "exercise": "abdominal-infra", "sets": 3, "reps": "10-15" }
+      {
+        "exercise": "desenvolvimento-militar",
+        "sets": 4,
+        "reps": "6-10"
+      },
+      {
+        "exercise": "elevacao-lateral",
+        "sets": 4,
+        "reps": "12-15"
+      },
+      {
+        "exercise": "elevacao-posterior",
+        "sets": 3,
+        "reps": "12-15"
+      },
+      {
+        "exercise": "encolhimento",
+        "sets": 3,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "abdominal-supra",
+        "sets": 3,
+        "reps": "15-20"
+      },
+      {
+        "exercise": "abdominal-infra",
+        "sets": 3,
+        "reps": "10-15"
+      }
+    ]
+  },
+  {
+    "slug": "ppl-noob-a",
+    "name": "PPL Noob — A",
+    "exercises": [
+      {
+        "exercise": "leg-press",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "mesa-flexora",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "supino-maquina",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "remada-baixa",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "elevacao-lateral",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "rosca-inclinada",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "triceps-na-polia",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "panturrilha-em-pe",
+        "sets": 2,
+        "reps": "10-15"
+      }
+    ]
+  },
+  {
+    "slug": "ppl-noob-b",
+    "name": "PPL Noob — B",
+    "exercises": [
+      {
+        "exercise": "cadeira-extensora",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "cadeira-flexora",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "supino-inclinado",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "puxada-frontal",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "desenvolvimento-militar",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "rosca-scott",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "triceps-na-polia",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "panturrilha-sentado",
+        "sets": 2,
+        "reps": "10-15"
+      }
+    ]
+  },
+  {
+    "slug": "ppl-noob-c",
+    "name": "PPL Noob — C",
+    "exercises": [
+      {
+        "exercise": "leg-press",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "cadeira-flexora",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "cadeira-abdutora",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "elevacao-pelvica",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "peck-deck",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "remada-apoiada",
+        "sets": 2,
+        "reps": "8-12"
+      },
+      {
+        "exercise": "elevacao-posterior",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "rosca-martelo",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "triceps-frances",
+        "sets": 2,
+        "reps": "10-15"
+      },
+      {
+        "exercise": "abdominal-na-maquina",
+        "sets": 2,
+        "reps": "10-15"
+      }
     ]
   }
 ]

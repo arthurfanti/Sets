@@ -1,52 +1,98 @@
 [
-  { "slug": "supino-reto", "name": "Supino reto", "muscleGroup": "Peito", "aliases": ["supino"] },
-  { "slug": "supino-inclinado", "name": "Supino inclinado", "muscleGroup": "Peito" },
-  { "slug": "supino-declinado", "name": "Supino declinado", "muscleGroup": "Peito" },
-  { "slug": "crucifixo", "name": "Crucifixo", "muscleGroup": "Peito" },
-  { "slug": "crossover", "name": "Crossover", "muscleGroup": "Peito" },
-  { "slug": "peck-deck", "name": "Peck deck", "muscleGroup": "Peito", "aliases": ["voador"] },
+  {
+    "slug": "supino-reto",
+    "name": "Supino reto",
+    "muscleGroup": "Peito",
+    "aliases": ["supino"]
+  },
+  {
+    "slug": "supino-inclinado",
+    "name": "Supino inclinado",
+    "muscleGroup": "Peito",
+    "aliases": ["supino inclinado máquina"]
+  },
+  {
+    "slug": "supino-declinado",
+    "name": "Supino declinado",
+    "muscleGroup": "Peito"
+  },
+  {
+    "slug": "crucifixo",
+    "name": "Crucifixo",
+    "muscleGroup": "Peito"
+  },
+  {
+    "slug": "crossover",
+    "name": "Crossover",
+    "muscleGroup": "Peito"
+  },
+  {
+    "slug": "peck-deck",
+    "name": "Peck deck",
+    "muscleGroup": "Peito",
+    "aliases": ["voador"]
+  },
   {
     "slug": "flexao-de-braco",
     "name": "Flexão de braço",
     "muscleGroup": "Peito",
     "aliases": ["flexão"]
   },
-
   {
     "slug": "puxada-frontal",
     "name": "Puxada frontal",
     "muscleGroup": "Costas",
     "aliases": ["puxada"]
   },
-  { "slug": "puxada-supinada", "name": "Puxada supinada", "muscleGroup": "Costas" },
-  { "slug": "barra-fixa", "name": "Barra fixa", "muscleGroup": "Costas" },
-  { "slug": "remada-curvada", "name": "Remada curvada", "muscleGroup": "Costas" },
+  {
+    "slug": "puxada-supinada",
+    "name": "Puxada supinada",
+    "muscleGroup": "Costas"
+  },
+  {
+    "slug": "barra-fixa",
+    "name": "Barra fixa",
+    "muscleGroup": "Costas"
+  },
+  {
+    "slug": "remada-curvada",
+    "name": "Remada curvada",
+    "muscleGroup": "Costas"
+  },
   {
     "slug": "remada-unilateral",
     "name": "Remada unilateral",
     "muscleGroup": "Costas",
     "aliases": ["serrote"]
   },
-  { "slug": "remada-baixa", "name": "Remada baixa", "muscleGroup": "Costas" },
+  {
+    "slug": "remada-baixa",
+    "name": "Remada baixa",
+    "muscleGroup": "Costas",
+    "aliases": ["remada sentada", "remada sentada máquina"]
+  },
   {
     "slug": "remada-cavalinho",
     "name": "Remada cavalinho",
     "muscleGroup": "Costas",
     "aliases": ["cavalinho"]
   },
-  { "slug": "encolhimento", "name": "Encolhimento", "muscleGroup": "Costas" },
+  {
+    "slug": "encolhimento",
+    "name": "Encolhimento",
+    "muscleGroup": "Costas"
+  },
   {
     "slug": "levantamento-terra",
     "name": "Levantamento terra",
     "muscleGroup": "Costas",
     "aliases": ["terra"]
   },
-
   {
     "slug": "desenvolvimento-militar",
     "name": "Desenvolvimento militar",
     "muscleGroup": "Ombros",
-    "aliases": ["militar"]
+    "aliases": ["desenvolvimento máquina", "militar"]
   },
   {
     "slug": "desenvolvimento-com-halteres",
@@ -71,23 +117,40 @@
     "muscleGroup": "Ombros",
     "aliases": ["crucifixo inverso"]
   },
-  { "slug": "remada-alta", "name": "Remada alta", "muscleGroup": "Ombros" },
-
+  {
+    "slug": "remada-alta",
+    "name": "Remada alta",
+    "muscleGroup": "Ombros"
+  },
   {
     "slug": "agachamento-livre",
     "name": "Agachamento livre",
     "muscleGroup": "Quadríceps",
     "aliases": ["agachamento"]
   },
-  { "slug": "agachamento-frontal", "name": "Agachamento frontal", "muscleGroup": "Quadríceps" },
-  { "slug": "leg-press", "name": "Leg press", "muscleGroup": "Quadríceps" },
+  {
+    "slug": "agachamento-frontal",
+    "name": "Agachamento frontal",
+    "muscleGroup": "Quadríceps"
+  },
+  {
+    "slug": "leg-press",
+    "name": "Leg press",
+    "muscleGroup": "Quadríceps",
+    "aliases": ["leg press máquina"]
+  },
   {
     "slug": "cadeira-extensora",
     "name": "Cadeira extensora",
     "muscleGroup": "Quadríceps",
     "aliases": ["extensora"]
   },
-  { "slug": "afundo", "name": "Afundo", "muscleGroup": "Quadríceps", "aliases": ["avanço"] },
+  {
+    "slug": "afundo",
+    "name": "Afundo",
+    "muscleGroup": "Quadríceps",
+    "aliases": ["avanço"]
+  },
   {
     "slug": "agachamento-bulgaro",
     "name": "Agachamento búlgaro",
@@ -100,16 +163,28 @@
     "muscleGroup": "Quadríceps",
     "aliases": ["hack"]
   },
-
   {
     "slug": "levantamento-terra-romeno",
     "name": "Levantamento terra romeno",
     "muscleGroup": "Posteriores",
     "aliases": ["romeno"]
   },
-  { "slug": "stiff", "name": "Stiff", "muscleGroup": "Posteriores" },
-  { "slug": "mesa-flexora", "name": "Mesa flexora", "muscleGroup": "Posteriores" },
-  { "slug": "cadeira-flexora", "name": "Cadeira flexora", "muscleGroup": "Posteriores" },
+  {
+    "slug": "stiff",
+    "name": "Stiff",
+    "muscleGroup": "Posteriores"
+  },
+  {
+    "slug": "mesa-flexora",
+    "name": "Mesa flexora",
+    "muscleGroup": "Posteriores"
+  },
+  {
+    "slug": "cadeira-flexora",
+    "name": "Cadeira flexora",
+    "muscleGroup": "Posteriores",
+    "aliases": ["flexora sentada"]
+  },
   {
     "slug": "hiperextensao",
     "name": "Hiperextensão",
@@ -122,9 +197,18 @@
     "muscleGroup": "Posteriores",
     "aliases": ["hip thrust"]
   },
-
-  { "slug": "panturrilha-em-pe", "name": "Panturrilha em pé", "muscleGroup": "Panturrilha" },
-  { "slug": "panturrilha-sentado", "name": "Panturrilha sentado", "muscleGroup": "Panturrilha" },
+  {
+    "slug": "panturrilha-em-pe",
+    "name": "Panturrilha em pé",
+    "muscleGroup": "Panturrilha",
+    "aliases": ["panturrilha em pé máquina"]
+  },
+  {
+    "slug": "panturrilha-sentado",
+    "name": "Panturrilha sentado",
+    "muscleGroup": "Panturrilha",
+    "aliases": ["panturrilha sentada"]
+  },
   {
     "slug": "panturrilha-no-leg-press",
     "name": "Panturrilha no leg press",
@@ -135,23 +219,39 @@
     "name": "Panturrilha unilateral",
     "muscleGroup": "Panturrilha"
   },
-
-  { "slug": "rosca-direta", "name": "Rosca direta", "muscleGroup": "Bíceps", "aliases": ["rosca"] },
-  { "slug": "rosca-alternada", "name": "Rosca alternada", "muscleGroup": "Bíceps" },
-  { "slug": "rosca-scott", "name": "Rosca Scott", "muscleGroup": "Bíceps", "aliases": ["scott"] },
-  { "slug": "rosca-concentrada", "name": "Rosca concentrada", "muscleGroup": "Bíceps" },
+  {
+    "slug": "rosca-direta",
+    "name": "Rosca direta",
+    "muscleGroup": "Bíceps",
+    "aliases": ["rosca"]
+  },
+  {
+    "slug": "rosca-alternada",
+    "name": "Rosca alternada",
+    "muscleGroup": "Bíceps"
+  },
+  {
+    "slug": "rosca-scott",
+    "name": "Rosca Scott",
+    "muscleGroup": "Bíceps",
+    "aliases": ["scott"]
+  },
+  {
+    "slug": "rosca-concentrada",
+    "name": "Rosca concentrada",
+    "muscleGroup": "Bíceps"
+  },
   {
     "slug": "rosca-martelo",
     "name": "Rosca martelo",
     "muscleGroup": "Bíceps",
-    "aliases": ["martelo"]
+    "aliases": ["martelo", "rosca martelo corda"]
   },
-
   {
     "slug": "triceps-na-polia",
     "name": "Tríceps na polia",
     "muscleGroup": "Tríceps",
-    "aliases": ["pulley"]
+    "aliases": ["pulley", "tríceps corda", "tríceps polia"]
   },
   {
     "slug": "triceps-testa",
@@ -165,9 +265,17 @@
     "muscleGroup": "Tríceps",
     "aliases": ["francês"]
   },
-  { "slug": "supino-fechado", "name": "Supino fechado", "muscleGroup": "Tríceps" },
-  { "slug": "mergulho", "name": "Mergulho", "muscleGroup": "Tríceps", "aliases": ["paralelas"] },
-
+  {
+    "slug": "supino-fechado",
+    "name": "Supino fechado",
+    "muscleGroup": "Tríceps"
+  },
+  {
+    "slug": "mergulho",
+    "name": "Mergulho",
+    "muscleGroup": "Tríceps",
+    "aliases": ["paralelas"]
+  },
   {
     "slug": "abdominal-supra",
     "name": "Abdominal supra",
@@ -180,13 +288,49 @@
     "muscleGroup": "Abdômen",
     "aliases": ["elevação de pernas"]
   },
-  { "slug": "abdominal-na-maquina", "name": "Abdominal na máquina", "muscleGroup": "Abdômen" },
+  {
+    "slug": "abdominal-na-maquina",
+    "name": "Abdominal na máquina",
+    "muscleGroup": "Abdômen"
+  },
   {
     "slug": "abdominal-obliquo",
     "name": "Abdominal oblíquo",
     "muscleGroup": "Abdômen",
     "aliases": ["oblíquo"]
   },
-  { "slug": "prancha", "name": "Prancha", "muscleGroup": "Abdômen" },
-  { "slug": "prancha-lateral", "name": "Prancha lateral", "muscleGroup": "Abdômen" }
+  {
+    "slug": "prancha",
+    "name": "Prancha",
+    "muscleGroup": "Abdômen"
+  },
+  {
+    "slug": "prancha-lateral",
+    "name": "Prancha lateral",
+    "muscleGroup": "Abdômen"
+  },
+  {
+    "slug": "supino-maquina",
+    "name": "Supino máquina",
+    "muscleGroup": "Peito",
+    "aliases": ["supino na máquina", "chest press"]
+  },
+  {
+    "slug": "rosca-inclinada",
+    "name": "Rosca inclinada com halteres",
+    "muscleGroup": "Bíceps",
+    "aliases": ["rosca inclinada"]
+  },
+  {
+    "slug": "cadeira-abdutora",
+    "name": "Cadeira abdutora",
+    "muscleGroup": "Posteriores",
+    "aliases": ["abdutora"]
+  },
+  {
+    "slug": "remada-apoiada",
+    "name": "Remada com apoio no peito",
+    "muscleGroup": "Costas",
+    "aliases": ["remada apoiada", "remada com apoio"]
+  }
 ]
