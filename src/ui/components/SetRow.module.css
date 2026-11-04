@@ -6,6 +6,11 @@
   padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
   border-left: 3px solid transparent;
   border-radius: var(--radius);
+  /* Completing a Set is the one non-hover motion: fast, so the row settles
+     before the lifter's eyes leave it. */
+  transition:
+    background-color var(--motion) ease,
+    border-color var(--motion) ease;
 }
 
 .row[data-active="true"] {
@@ -91,6 +96,10 @@
   border-radius: var(--radius);
   color: var(--text-muted);
   font-size: var(--text-row);
+  transition:
+    color var(--motion) ease,
+    border-color var(--motion) ease,
+    opacity var(--motion) ease;
 }
 
 .confirm:focus-visible {

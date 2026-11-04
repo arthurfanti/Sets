@@ -77,11 +77,13 @@ describe("design token contrast", () => {
   });
 
   it("keeps the filled button's label readable against the dark end of its gradient", () => {
-    // The fill is a violet-to-purple gradient with white text, exactly as the
-    // design specifies. White clears 4.5:1 against the purple end (8.6:1) and
-    // does not against the violet end (4.0:1); the drop shadow and the 17px
-    // semibold weight are what carry it there. That is the one documented
-    // exception to the text floor, recorded in DESIGN.md.
-    expect(contrast("#ffffff", "#7928ca")).toBeGreaterThanOrEqual(4.5);
+    // The fill is a violet-to-purple gradient with a white label, exactly as
+    // the design specifies. White clears 7:1 against the purple end (7.07:1)
+    // and does not against the violet end (3.26:1) or the midpoint (4.40:1);
+    // the drop shadow and the 17px semibold weight are what carry it there.
+    // That is the one documented exception to the text floor, recorded in
+    // DESIGN.md as an accepted trade, not an oversight.
+    expect(contrast("#ffffff", "#7928ca")).toBeGreaterThanOrEqual(7);
+    expect(contrast("#ffffff", "#b26bff")).toBeGreaterThanOrEqual(3.2);
   });
 });

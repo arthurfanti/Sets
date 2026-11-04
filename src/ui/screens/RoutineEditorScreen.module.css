@@ -55,19 +55,11 @@
 }
 
 .note {
+  composes: glass from "@/ui/glass.module.css";
   margin: 0;
   padding: var(--space-3);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
   color: var(--text-muted);
   font-size: var(--text-meta);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .nameField {
@@ -84,21 +76,13 @@
 }
 
 .nameInput {
+  composes: glass from "@/ui/glass.module.css";
   min-height: var(--action-height);
   padding: 0 var(--space-3);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
   color: var(--text);
   font-family: inherit;
   font-size: var(--text-row);
   font-weight: 600;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .nameInput:focus-visible {
@@ -115,20 +99,12 @@
 }
 
 .row {
+  composes: glass from "@/ui/glass.module.css";
   display: grid;
   grid-template-columns: var(--target) 1fr var(--target);
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-1);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .handle {
@@ -300,9 +276,9 @@
     transform var(--transition);
   border: none;
   border-radius: var(--radius);
-  color: #ffffff;
+  color: var(--text);
   text-shadow: var(--label-shadow);
-  font-size: var(--text-body);
+  font-size: var(--text-row);
   font-weight: 600;
 }
 

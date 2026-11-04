@@ -18,22 +18,21 @@ The lifter is standing at a rack with a bar loaded, sweaty hands, and 90 seconds
 | `border` | `#2E3238` | 1px separators, button outlines |
 | `text` | `#FFFFFF` | logged numbers and body text |
 | `text-muted` | `#9BA1A6` | labels, secondary stats, placeholders |
-| `text-suggestion` | `#9BA1A6` | pre-filled Set values: dimmer than `text` |
+| `text-suggestion` | `#A7AEB8` | pre-filled Set values: dimmer than `text` |
 | `primary` | `#B26BFF` | **interaction only** |
-| `primary-fill` | `#B26BFF` | filled primary button, with `#0C0E11` on it (5.7:1) |
+| `primary-fill` | `#B26BFF` | filled primary button; white label (3.26:1 at the violet end — the one accepted exception, below) |
 | `data` | `#F72585` | **data only** — chart lines and the Best Set dot |
-| `flare-primary` / `flare-data` | `#B26BFF` / `#F72585` | the two ambient flares, at 22% and 14% |
 
-Code token names: `--accent-interaction` (primary), `--accent-data` (data), `--primary-fill` / `--primary-fill-text` (filled button), `--text-suggestion`.
+Code token names: `--accent-interaction` (primary), `--accent-data` (data), `--primary-fill` (filled button fill), `--text-suggestion`.
 
 Hard colour rules:
 
-- **Primary** marks only: the Set currently being logged (a 3px left bar on its row), a filled primary button, and the focus ring. Nothing else is primary. Never a large primary background behind body text.
+- **Primary** marks only: the Set currently being logged (a 3px left bar on its row), a filled primary button, the focus ring, and a selected control's outline (a category chip in its pressed state). Nothing else is primary. Never a large primary background behind body text.
 - **Data** (magenta) appears only inside charts: the estimated 1RM line, the volume line, and the Best Set dot.
-- **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.3:1 on `bg`, 7.3:1 on `surface-1`, 6.4:1 on `surface-2`) so a guess looks dimmer than a logged Set.
-- No gradient between the two accents. The background carries two ambient flares — violet at 22% from the top left, magenta at 14% from the top right — over a vignette into `bg`. Non-interactive, no blur, no box-shadow.
-- No shadows, no blur, no glass. Separation is a 1px border plus one step of the surface ramp.
-- Contrast floor: body text and labels ≥4.5:1; a **logged** numeral ≥7:1; a **pre-filled** numeral ≥4.5:1. That is the only place the numeral floor is relaxed, and it is a deliberate trade so a guess cannot be mistaken for a logged Set.
+- **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.6:1 on `bg`, 7.6:1 on `surface-1`, 6.9:1 on `surface-2`) so a guess looks dimmer than a logged Set.
+- No gradient between the two accents. The background carries three ambient flares over a vignette into `bg`: violet `#B26BFF` at 14% mid-left, magenta `#F72585` at 12% top-right, purple `#7928CA` at 20% bottom-right. Non-interactive, `pointer-events: none`, no blur, no box-shadow.
+- Cards are glass: a white 6%→2% pane over `backdrop-filter: blur(24px)`, a 9% white border, a 12px radius and the card shadow (an inset 1px top highlight under a soft drop). Blur is scoped to cards and the filled button's halo is the only other shadow; everything else separates with a 1px border plus one step of the surface ramp.
+- Contrast floor: body text and labels ≥4.5:1; a **logged** numeral ≥7:1; a **pre-filled** numeral ≥4.5:1. That is the only place the numeral floor is relaxed, and it is a deliberate trade so a guess cannot be mistaken for a logged Set. The single accepted exception outside that trade is the filled button's white label on the violet end of its gradient (3.26:1), carried by the drop shadow and the 17px semibold weight.
 
 ## Type
 
@@ -46,20 +45,21 @@ System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`
 | Set value (the hero) | 32px / 600, tabular |
 | Body / labels | 15px / 400 |
 | Secondary stat | 13px / 400, muted |
-| Button label | 15px / 600 |
+| Button label | 17px / 600 |
 
 ## Space and shape
 
 - Spacing scale only: **4, 8, 12, 16, 24, 32**.
-- Corner radius **8px** for cards, rows and buttons; **6px** for small chips.
+- Corner radius **12px** for cards (`--radius-card`); **8px** for rows and buttons (`--radius`); **6px** for small chips (`--radius-sm`).
 - Minimum touch target **48×48**; the primary action row is **56–64** tall and sits at the bottom, in thumb reach.
 - Horizontal page padding 16px.
+- Motion: `--transition` (300ms, `cubic-bezier(0.4, 0, 0.2, 1)`) for anything hover- or press-shaped — border lifts, wash fades, scale-to-0.99, chevrons. `--motion` (140ms, 0ms under `prefers-reduced-motion`) for the Set-completion flip on a row and the update banner's entrance.
 
 ## Components
 
-- **Card**: a translucent pane — `white/6%` to `white/2%` gradient over `backdrop-filter: blur(24px)`, a `white/9%` border, 12px radius, and an inset top highlight under a soft drop shadow. On hover the border turns violet at 40% and a violet wash fades in; on press the card scales to 0.99. The leading card carries a violet edge and a magenta glow instead of the hover wash.
-- **Filled button**: violet→purple gradient (`#B26BFF → #9E46FF → #7928CA`) under a white half-height sheen, 12px radius, a 28px violet halo, **white label with a drop shadow**, and a lighter gradient plus a wider halo on hover; presses scale to 0.99. White on the violet end measures 4.0:1 — the one documented exception to the text floor, carried by the shadow and the 17px semibold weight.
-- **Badge**: pill, 11px uppercase, `rgb(255 255 255 / 4%)` on a `rgba(255,255,255,0.05)` border, used for group counts ("4 prontas"). A square-cornered violet variant exists for a status tag, and is not yet used because v1 has no notion of an active Routine.
+- **Card**: a glass pane — `white/6%` to `white/2%` gradient over `backdrop-filter: blur(24px)`, a `white/9%` border, 12px radius, and an inset top highlight under a soft drop shadow. Every card-like surface composes the one `.glass` class in `src/ui/glass.module.css` and keeps only its own padding and layout. On hover the border turns violet at 40% and a violet wash fades in; on press the card scales to 0.99.
+- **Filled button**: violet→purple gradient (`#B26BFF → #9E46FF → #7928CA`) under a white half-height sheen, 8px radius, a 28px violet halo, **a white 17px/600 label with a drop shadow**, and a lighter gradient plus a wider halo on hover; presses scale to 0.99. White on the violet end measures **3.26:1** (the midpoint 4.40:1, the purple end 7.07:1) — below the text floor, accepted as the one exception, carried by the shadow and the semibold weight.
+- **Badge**: pill, 11px uppercase, `rgb(255 255 255 / 4%)` on a `rgb(255 255 255 / 5%)` border, `text-muted` label (6.8:1 on the pill over `bg`, 5.2:1 over the brightest flare), used for group counts ("4 prontas"). A violet "Ativa" status tag is **deliberately absent**: the brief asks for one, but V2 uses it to mark the user's active Routine and v1 has no such concept, so no dead variant ships.
 - **Screen title**: gradient-clipped white to 72% white, matching the V2 header.
 
 ## Composition rules

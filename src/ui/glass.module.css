@@ -1,0 +1,15 @@
+/* The glass card, in one place. Every card-like surface composes this class and
+   keeps only its own padding and layout. The pane, the border, the 12px radius,
+   the blur, the shadow and the hover/press transition are the design system's,
+   not a component's. */
+.glass {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--card-shadow);
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
+}

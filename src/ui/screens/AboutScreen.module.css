@@ -44,6 +44,7 @@
 }
 
 .danger {
+  composes: glass from "@/ui/glass.module.css";
   display: block;
   width: 100%;
   min-height: var(--target);
@@ -53,16 +54,7 @@
   font-size: var(--text-body);
   font-weight: 600;
   text-align: left;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
   cursor: pointer;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .danger:disabled {
@@ -171,8 +163,9 @@
   cursor: pointer;
 }
 
+/* Destructive stays neutral: violet marks interaction, never danger. */
 .danger:hover {
-  border-color: rgb(178 107 255 / 40%);
+  border-color: var(--text-muted);
 }
 
 .danger:active {

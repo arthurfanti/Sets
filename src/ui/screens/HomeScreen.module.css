@@ -69,20 +69,12 @@
 }
 
 .rowItem {
+  composes: glass from "@/ui/glass.module.css";
   position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  background: var(--card-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--card-shadow);
   overflow: hidden;
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .rowItem:hover,
@@ -94,8 +86,8 @@
   transform: scale(0.99);
 }
 
-/* The violet wash V2 puts on every card, and the warmer edge on the one that
-   leads the list. Both are background layers, so they cost no extra paint. */
+/* The violet wash V2 puts on every card hover. It is a background layer, so it
+   costs no extra paint. */
 .rowItem::before {
   content: "";
   position: absolute;
@@ -109,13 +101,6 @@
 .rowItem:hover::before,
 .rowItem:focus-within::before {
   opacity: 1;
-}
-
-.rowItem:first-child {
-  border-color: rgb(178 107 255 / 25%);
-  box-shadow:
-    var(--card-shadow),
-    0 0 18px -6px rgb(247 37 133 / 35%);
 }
 
 .resume {
@@ -169,9 +154,9 @@
   background-image: var(--grad-primary), var(--sheen);
   border-radius: var(--radius);
   box-shadow: var(--glow-primary);
-  color: #ffffff;
+  color: var(--text);
   text-shadow: var(--label-shadow);
-  font-size: var(--text-body);
+  font-size: var(--text-row);
   font-weight: 600;
   text-decoration: none;
 }

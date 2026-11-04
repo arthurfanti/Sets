@@ -4,21 +4,13 @@
 }
 
 .search {
+  composes: glass from "@/ui/glass.module.css";
   width: 100%;
   min-height: var(--target);
   padding: 0 var(--space-3);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
   color: var(--text);
   font-family: inherit;
   font-size: var(--text-row);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .search:focus-visible,
@@ -37,21 +29,20 @@
 }
 
 .create {
+  composes: glass from "@/ui/glass.module.css";
   width: 100%;
   min-height: var(--target);
   padding: 0 var(--space-3);
-  background: var(--card-bg);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-card);
   color: var(--text);
   font-size: var(--text-body);
   text-align: left;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
+}
+
+/* The one glass pane whose edge is dashed: it creates a thing instead of
+   holding one. The element selector outranks `.glass`, which the bundle emits
+   after this file, so the override does not depend on stylesheet order. */
+button.create {
+  border: 1px dashed var(--border);
 }
 
 .group {
@@ -87,40 +78,24 @@
 }
 
 .pick {
+  composes: glass from "@/ui/glass.module.css";
   flex: 1;
   min-height: var(--target);
   padding: var(--space-2) var(--space-3);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
   color: var(--text);
   font-size: var(--text-row);
   font-weight: 600;
   text-align: left;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .added {
+  composes: glass from "@/ui/glass.module.css";
   display: grid;
   flex: 1;
   gap: var(--space-1);
   min-height: var(--target);
   align-content: center;
   padding: var(--space-2) var(--space-3);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .pickName {
@@ -135,37 +110,21 @@
 }
 
 .more {
+  composes: glass from "@/ui/glass.module.css";
   flex: none;
   width: var(--target);
   height: var(--target);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
   color: var(--text-muted);
   font-size: var(--text-body);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .action {
+  composes: glass from "@/ui/glass.module.css";
   min-height: var(--target);
   padding: 0 var(--space-3);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
   color: var(--text);
   font-size: var(--text-body);
   text-align: left;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--card-shadow);
-  transition:
-    border-color var(--transition),
-    transform var(--transition);
 }
 
 .create:hover {
