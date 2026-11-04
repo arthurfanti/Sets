@@ -2,8 +2,15 @@
   margin-bottom: var(--space-5);
 }
 
-.sectionTitle {
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   margin: 0 0 var(--space-2);
+}
+
+.sectionTitle {
+  margin: 0;
   color: var(--text-muted);
   font-size: var(--text-label);
   font-weight: 600;
@@ -62,12 +69,34 @@
 }
 
 .rowItem {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-1);
   background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+/* The violet wash V2 puts on every card, and the warmer edge on the one that
+   leads the list. Both are background layers, so they cost no extra paint. */
+.rowItem::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--wash);
+  pointer-events: none;
+}
+
+.rowItem:first-child::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgb(178 107 255 / 30%);
+  box-shadow: 0 0 18px -6px rgb(247 37 133 / 35%);
+  pointer-events: none;
 }
 
 .resume {
@@ -117,8 +146,10 @@
   width: 100%;
   min-height: var(--action-height);
   margin-top: var(--space-2);
-  background: var(--primary-fill);
+  background-color: var(--primary-fill);
+  background-image: var(--reflection);
   border-radius: var(--radius);
+  box-shadow: var(--glow-primary);
   color: var(--primary-fill-text);
   font-size: var(--text-body);
   font-weight: 600;

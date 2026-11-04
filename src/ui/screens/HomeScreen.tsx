@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { countSessions, listExercises, listRoutines } from "@/db/repositories";
 import { findActiveSession } from "@/db/sessions";
 import type { Routine, Session } from "@/domain";
+import { Badge } from "@/ui/components/Badge";
 import { Placeholder } from "@/ui/Placeholder";
 import styles from "./HomeScreen.module.css";
 
@@ -68,6 +69,7 @@ export function HomeScreen() {
         title="Rotinas prontas"
         routines={data.routines.filter((routine) => routine.source === "builtin")}
         nameOf={nameOf}
+        badgeLabel="pronta"
       />
 
       <RoutineGroup
@@ -75,6 +77,7 @@ export function HomeScreen() {
         routines={data.routines.filter((routine) => routine.source === "user")}
         nameOf={nameOf}
         emptyText="Nenhuma rotina sua ainda."
+        badgeLabel="minha"
       />
 
       <Link to="/rotina/nova" className={styles.primary}>
@@ -98,14 +101,25 @@ interface RoutineGroupProps {
   routines: Routine[];
   nameOf: (exerciseId: string) => string | undefined;
   emptyText?: string;
+  /** Singular noun for the count badge, e.g. "pronta" → "2 prontas". */
+  badgeLabel?: string;
 }
 
-function RoutineGroup({ title, routines, nameOf, emptyText }: RoutineGroupProps) {
+function RoutineGroup({ title, routines, nameOf, emptyText, badgeLabel }: RoutineGroupProps) {
   if (routines.length === 0 && !emptyText) return null;
+
+  const count = routines.length;
+  const badge =
+    badgeLabel && count > 0
+      ? `${count} ${badgeLabel}${count === 1 ? "" : badgeLabel.endsWith("a") ? "s" : "s"}`
+      : null;
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.sectionTitle}>{title}</h2>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>{title}</h2>
+        {badge ? <Badge>{badge}</Badge> : null}
+      </div>
       {routines.length === 0 ? (
         <p className={styles.empty}>{emptyText}</p>
       ) : (

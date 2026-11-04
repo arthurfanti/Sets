@@ -40,7 +40,9 @@
 .primary {
   width: 100%;
   min-height: var(--action-height);
-  background: var(--primary-fill);
+  background-color: var(--primary-fill);
+  background-image: var(--reflection);
+  box-shadow: var(--glow-primary);
   border: 0;
   border-radius: var(--radius);
   color: var(--primary-fill-text);

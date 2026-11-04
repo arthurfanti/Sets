@@ -56,6 +56,13 @@ System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`
 - Minimum touch target **48×48**; the primary action row is **56–64** tall and sits at the bottom, in thumb reach.
 - Horizontal page padding 16px.
 
+## Components
+
+- **Card**: `--surface-1`, 1px `--border`, `--radius-card` (12px), with a violet-to-transparent wash (`--wash`) as a background layer. The leading card in a list also gets a 1px violet edge and a soft magenta glow, so emphasis never needs a second colour.
+- **Filled button**: solid `--primary-fill` with a white top reflection (`--reflection`) and an outer violet glow (`--glow-primary`). The fill stays solid rather than the brief's gradient, because a violet→purple gradient puts the label under 4.5:1 at the dark end.
+- **Badge**: pill, 11px uppercase, `rgb(255 255 255 / 4%)` on a `rgba(255,255,255,0.05)` border, used for group counts ("4 prontas"). A square-cornered violet variant exists for a status tag, and is not yet used because v1 has no notion of an active Routine.
+- **Screen title**: gradient-clipped white to 72% white, matching the V2 header.
+
 ## Composition rules
 
 - One column. No tab bar, no drawer, no sidebar, no hamburger.
