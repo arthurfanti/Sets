@@ -4,14 +4,14 @@
 
 :root {
   /* Surfaces */
-  --bg: #07080a;
-  --surface-1: #1e2023;
-  --surface-2: #282a2d;
-  --border: rgb(255 255 255 / 8%);
+  --bg: #0c0e11;
+  --surface-1: #1a1c1f;
+  --surface-2: #22252a;
+  --border: #2e3238;
 
   /* Text */
-  --text: #edeff2;
-  --text-muted: #9ca3af;
+  --text: #ffffff;
+  --text-muted: #9ba1a6;
   /* A suggestion is dimmer than text but still a numeral: 8.0:1 on surface-1,
      7.1:1 on surface-2, above the 7:1 floor. */
   --text-suggestion: #a7aeb8;
@@ -22,8 +22,9 @@
 
   /* Filled primary button: the vivid tone, with near-black on it. */
   --primary-fill: #b26bff;
-  --primary-fill-text: #111317;
-  --flare: #7928ca;
+  --primary-fill-text: #0c0e11;
+  --flare-primary: #b26bff;
+  --flare-data: #f72585;
 
   /* Spacing: 4 / 8 / 12 / 16 / 24 / 32 */
   --space-1: 4px;

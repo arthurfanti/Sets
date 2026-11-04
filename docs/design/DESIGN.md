@@ -2,6 +2,8 @@
 
 A personal strength-training log for one lifter, used on a phone, one-handed, mid-workout. Dark only. All copy in **pt-BR**. The name of the app is **Sets**.
 
+Source of truth for the look: `docs/design/obsidian-athletics-brief.md` (the Stitch PRD).
+
 ## Why this design exists
 
 The lifter is standing at a rack with a bar loaded, sweaty hands, and 90 seconds of attention. Every screen must answer one question at a glance. Numbers are the interface: they must be large, tabular, and never jump position as digits change.
@@ -10,17 +12,17 @@ The lifter is standing at a rack with a bar loaded, sweaty hands, and 90 seconds
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `bg` | `#07080A` | app background, always |
-| `surface-1` | `#1E2023` | cards, rows |
-| `surface-2` | `#282A2D` | raised rows, pickers, modals |
-| `border` | `rgba(255,255,255,0.08)` | 1px separators, button outlines |
-| `text` | `#EDEFF2` | logged numbers and body text |
-| `text-muted` | `#9CA3AF` | labels, secondary stats, placeholders |
-| `text-suggestion` | `#9CA3AF` | pre-filled Set values: dimmer than `text` |
+| `bg` | `#0C0E11` | app background, always |
+| `surface-1` | `#1A1C1F` | cards, rows |
+| `surface-2` | `#22252A` | raised rows, pickers, modals |
+| `border` | `#2E3238` | 1px separators, button outlines |
+| `text` | `#FFFFFF` | logged numbers and body text |
+| `text-muted` | `#9BA1A6` | labels, secondary stats, placeholders |
+| `text-suggestion` | `#9BA1A6` | pre-filled Set values: dimmer than `text` |
 | `primary` | `#B26BFF` | **interaction only** |
-| `primary-fill` | `#B26BFF` | filled primary button, with `#111317` on it (5.7:1) |
+| `primary-fill` | `#B26BFF` | filled primary button, with `#0C0E11` on it (5.7:1) |
 | `data` | `#F72585` | **data only** — chart lines and the Best Set dot |
-| `flare` | `#7928CA` | the vignette's purple flare, at 32% |
+| `flare-primary` / `flare-data` | `#B26BFF` / `#F72585` | the two ambient flares, at 22% and 14% |
 
 Code token names: `--accent-interaction` (primary), `--accent-data` (data), `--primary-fill` / `--primary-fill-text` (filled button), `--text-suggestion`.
 
@@ -29,13 +31,14 @@ Hard colour rules:
 - **Primary** marks only: the Set currently being logged (a 3px left bar on its row), a filled primary button, and the focus ring. Nothing else is primary. Never a large primary background behind body text.
 - **Data** (magenta) appears only inside charts: the estimated 1RM line, the volume line, and the Best Set dot.
 - **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.3:1 on `bg`, 7.3:1 on `surface-1`, 6.4:1 on `surface-2`) so a guess looks dimmer than a logged Set.
-- No gradient between the two accents. One decorative background is allowed: a purple flare (`#7928CA` at 32% from the top) over a vignette (`transparent → bg/40 at 40% → bg`), non-interactive. No blur, no box-shadow, no glass.
+- No gradient between the two accents. The background carries two ambient flares — violet at 22% from the top left, magenta at 14% from the top right — over a vignette into `bg`. Non-interactive, no blur, no box-shadow.
+- The brief asks for glassmorphic translucent cards. They are **solid** here instead: the background behind them is nearly flat, so translucency buys almost nothing and `backdrop-filter` costs real paint on a mid-range phone. Border plus one surface step does the separation.
 - No shadows, no blur, no glass. Separation is a 1px border plus one step of the surface ramp.
 - Contrast floor: body text and labels ≥4.5:1; a **logged** numeral ≥7:1; a **pre-filled** numeral ≥4.5:1. That is the only place the numeral floor is relaxed, and it is a deliberate trade so a guess cannot be mistaken for a logged Set.
 
 ## Type
 
-System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`. No webfonts: V2's Geist is deliberately not adopted, so the app keeps zero font downloads and instant first paint at the cost of a less distinctive headline. `font-variant-numeric: tabular-nums` on every number.
+System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`. No webfonts: the brief specifies Geist and Geist Mono, and they are deliberately not adopted, so the app keeps zero font downloads and instant first paint. Tabular numerals (`font-variant-numeric`) recover most of what Geist Mono would have given the weight and rep columns. `font-variant-numeric: tabular-nums` on every number.
 
 | Role | Size / weight |
 | --- | --- |
