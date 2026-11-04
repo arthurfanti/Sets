@@ -43,6 +43,7 @@ Routing is hash-based on purpose: the phone's back gesture must return to the pr
 - `GLOSSARY.md` — the vocabulary, English term paired with its pt-BR label. "Treino" is banned: it means both Routine and Session.
 - `docs/adr/` — decisions that are hard to reverse and would look surprising without context.
 - `.scratch/v1-pwa/spec.md` — the buildable plan behind the current work.
-- `docs/design/stitch/` — the designed screens and `DESIGN.md`, the token and copy rules.
+- `docs/design/stitch/` — the layout reference from Stitch, with a warning that its colours predate the restyle.
+- `docs/design/DESIGN.md` — the palette, type, spacing and contrast floors the code obeys.
 
 Work is tracked in GitHub issues.
