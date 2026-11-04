@@ -10,25 +10,26 @@ The lifter is standing at a rack with a bar loaded, sweaty hands, and 90 seconds
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `bg` | `#111317` | app background, always |
+| `bg` | `#07080A` | app background, always |
 | `surface-1` | `#1E2023` | cards, rows |
 | `surface-2` | `#282A2D` | raised rows, pickers, modals |
 | `border` | `rgba(255,255,255,0.08)` | 1px separators, button outlines |
-| `text` | `#E2E2E6` | logged numbers and body text |
-| `text-muted` | `#A7AEB8` | labels, secondary stats, placeholders |
-| `text-suggestion` | `#A7AEB8` | pre-filled Set values: dimmer than `text` |
-| `primary` | `#DBB8FF` | **interaction only** |
-| `primary-fill` | `#B46EFF` | filled primary button, with `#111317` on it |
-| `data` | `#F1C044` | **data only** — chart lines and the Best Set dot |
+| `text` | `#EDEFF2` | logged numbers and body text |
+| `text-muted` | `#9CA3AF` | labels, secondary stats, placeholders |
+| `text-suggestion` | `#9CA3AF` | pre-filled Set values: dimmer than `text` |
+| `primary` | `#B26BFF` | **interaction only** |
+| `primary-fill` | `#B26BFF` | filled primary button, with `#111317` on it (5.7:1) |
+| `data` | `#F72585` | **data only** — chart lines and the Best Set dot |
+| `flare` | `#7928CA` | the vignette's purple flare, at 32% |
 
 Code token names: `--accent-interaction` (primary), `--accent-data` (data), `--primary-fill` / `--primary-fill-text` (filled button), `--text-suggestion`.
 
 Hard colour rules:
 
 - **Primary** marks only: the Set currently being logged (a 3px left bar on its row), a filled primary button, and the focus ring. Nothing else is primary. Never a large primary background behind body text.
-- **Data** (amber) appears only inside charts: the estimated 1RM line, the volume line, and the Best Set dot.
+- **Data** (magenta) appears only inside charts: the estimated 1RM line, the volume line, and the Best Set dot.
 - **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.3:1 on `bg`, 7.3:1 on `surface-1`, 6.4:1 on `surface-2`) so a guess looks dimmer than a logged Set.
-- No gradient between the two accents. One decorative vignette is allowed: a single radial gradient behind page content (`transparent → bg/40 at 40% → bg`), non-interactive. No blur, no box-shadow, no glass.
+- No gradient between the two accents. One decorative background is allowed: a purple flare (`#7928CA` at 32% from the top) over a vignette (`transparent → bg/40 at 40% → bg`), non-interactive. No blur, no box-shadow, no glass.
 - No shadows, no blur, no glass. Separation is a 1px border plus one step of the surface ramp.
 - Contrast floor: body text and labels ≥4.5:1; a **logged** numeral ≥7:1; a **pre-filled** numeral ≥4.5:1. That is the only place the numeral floor is relaxed, and it is a deliberate trade so a guess cannot be mistaken for a logged Set.
 
