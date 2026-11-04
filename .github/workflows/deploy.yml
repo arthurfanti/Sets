@@ -3,6 +3,12 @@ name: Deploy
 on:
   push:
     branches: [main]
+    # Docs-only commits should not redeploy the app — that would prompt every
+    # installed phone to update for a README change.
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - ".scratch/**"
   workflow_dispatch:
 
 concurrency:
