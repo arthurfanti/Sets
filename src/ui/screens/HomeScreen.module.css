@@ -73,10 +73,25 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  background: var(--surface-1);
-  border: 1px solid var(--border);
+  background: var(--card-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
   overflow: hidden;
+  transition:
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.rowItem:hover,
+.rowItem:focus-within {
+  border-color: rgb(178 107 255 / 40%);
+}
+
+.rowItem:active {
+  transform: scale(0.99);
 }
 
 /* The violet wash V2 puts on every card, and the warmer edge on the one that
@@ -86,17 +101,21 @@
   position: absolute;
   inset: 0;
   background: var(--wash);
+  opacity: 0;
+  transition: opacity var(--transition);
   pointer-events: none;
 }
 
-.rowItem:first-child::after {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  border: 1px solid rgb(178 107 255 / 30%);
-  box-shadow: 0 0 18px -6px rgb(247 37 133 / 35%);
-  pointer-events: none;
+.rowItem:hover::before,
+.rowItem:focus-within::before {
+  opacity: 1;
+}
+
+.rowItem:first-child {
+  border-color: rgb(178 107 255 / 25%);
+  box-shadow:
+    var(--card-shadow),
+    0 0 18px -6px rgb(247 37 133 / 35%);
 }
 
 .resume {
@@ -147,10 +166,11 @@
   min-height: var(--action-height);
   margin-top: var(--space-2);
   background-color: var(--primary-fill);
-  background-image: var(--reflection);
+  background-image: var(--grad-primary), var(--sheen);
   border-radius: var(--radius);
   box-shadow: var(--glow-primary);
-  color: var(--primary-fill-text);
+  color: #ffffff;
+  text-shadow: var(--label-shadow);
   font-size: var(--text-body);
   font-weight: 600;
   text-decoration: none;
@@ -189,4 +209,13 @@
   outline: 2px solid var(--accent-interaction);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+.primary:hover {
+  background-image: var(--grad-primary-hover), var(--sheen);
+  box-shadow: var(--glow-primary-hover);
+}
+
+.primary:active {
+  transform: scale(0.99);
 }

@@ -40,11 +40,22 @@
   --radius-card: 12px;
   --radius-pill: 999px;
 
-  /* Tactility: a top reflection on filled controls and a soft outer glow. */
-  --reflection: linear-gradient(180deg, rgb(255 255 255 / 18%) 0%, rgb(255 255 255 / 0%) 55%);
-  --glow-primary: 0 8px 24px -10px rgb(178 107 255 / 60%);
+  /* Tactility, taken from the V2 markup: a violet-to-purple gradient under a
+     white sheen, a violet halo, and a card that is a translucent pane. */
+  --grad-primary: linear-gradient(90deg, #b26bff 0%, #9e46ff 50%, #7928ca 100%);
+  --grad-primary-hover: linear-gradient(90deg, #c284ff 0%, #a756ff 50%, #8a33db 100%);
+  --sheen: linear-gradient(180deg, rgb(255 255 255 / 25%) 0%, rgb(255 255 255 / 0%) 50%);
+  --reflection: var(--sheen);
+  --glow-primary: 0 0 28px rgb(178 107 255 / 45%);
+  --glow-primary-hover: 0 0 36px rgb(178 107 255 / 65%);
   --glow-dot: 0 0 8px rgb(178 107 255 / 80%);
   --wash: linear-gradient(135deg, rgb(178 107 255 / 10%) 0%, transparent 60%);
+  --card-bg: linear-gradient(180deg, rgb(255 255 255 / 6%) 0%, rgb(255 255 255 / 2%) 100%);
+  --card-border: rgb(255 255 255 / 9%);
+  --card-shadow: 0 8px 24px -6px rgb(0 0 0 / 50%), inset 0 1px 0 0 rgb(255 255 255 / 10%);
+  --glass-blur: blur(24px);
+  --label-shadow: 0 1px 2px rgb(0 0 0 / 50%);
+  --transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   --target: 48px;
   --action-height: 56px;
 

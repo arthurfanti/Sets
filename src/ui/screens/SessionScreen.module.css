@@ -152,12 +152,18 @@
 
 .primary {
   min-height: var(--action-height);
+  position: relative;
+  overflow: hidden;
   background-color: var(--primary-fill);
-  background-image: var(--reflection);
+  background-image: var(--grad-primary), var(--sheen);
   box-shadow: var(--glow-primary);
+  transition:
+    box-shadow var(--transition),
+    transform var(--transition);
   border: 0;
   border-radius: var(--radius);
-  color: var(--primary-fill-text);
+  color: #ffffff;
+  text-shadow: var(--label-shadow);
   font-size: var(--text-body);
   font-weight: 600;
 }
@@ -276,4 +282,13 @@
 .confirm:disabled {
   color: var(--text-muted);
   cursor: default;
+}
+
+.primary:hover {
+  background-image: var(--grad-primary-hover), var(--sheen);
+  box-shadow: var(--glow-primary-hover);
+}
+
+.primary:active {
+  transform: scale(0.99);
 }

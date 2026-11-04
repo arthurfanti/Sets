@@ -19,7 +19,7 @@
   border: 1px solid rgb(178 107 255 / 30%);
   border-radius: var(--radius-sm);
   background: rgb(178 107 255 / 20%);
-  color: var(--accent-interaction);
+  color: #dbb8ff;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.04em;

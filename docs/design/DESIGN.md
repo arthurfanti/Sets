@@ -32,7 +32,6 @@ Hard colour rules:
 - **Data** (magenta) appears only inside charts: the estimated 1RM line, the volume line, and the Best Set dot.
 - **No accent colour ever sits behind a weight or rep numeral.** Numerals are `text`, except a pre-filled suggestion, which uses `text-suggestion` (`#A7AEB8`: 8.3:1 on `bg`, 7.3:1 on `surface-1`, 6.4:1 on `surface-2`) so a guess looks dimmer than a logged Set.
 - No gradient between the two accents. The background carries two ambient flares — violet at 22% from the top left, magenta at 14% from the top right — over a vignette into `bg`. Non-interactive, no blur, no box-shadow.
-- The brief asks for glassmorphic translucent cards. They are **solid** here instead: the background behind them is nearly flat, so translucency buys almost nothing and `backdrop-filter` costs real paint on a mid-range phone. Border plus one surface step does the separation.
 - No shadows, no blur, no glass. Separation is a 1px border plus one step of the surface ramp.
 - Contrast floor: body text and labels ≥4.5:1; a **logged** numeral ≥7:1; a **pre-filled** numeral ≥4.5:1. That is the only place the numeral floor is relaxed, and it is a deliberate trade so a guess cannot be mistaken for a logged Set.
 
@@ -58,8 +57,8 @@ System font stack — `-apple-system, system-ui, "Segoe UI", Roboto, sans-serif`
 
 ## Components
 
-- **Card**: `--surface-1`, 1px `--border`, `--radius-card` (12px), with a violet-to-transparent wash (`--wash`) as a background layer. The leading card in a list also gets a 1px violet edge and a soft magenta glow, so emphasis never needs a second colour.
-- **Filled button**: solid `--primary-fill` with a white top reflection (`--reflection`) and an outer violet glow (`--glow-primary`). The fill stays solid rather than the brief's gradient, because a violet→purple gradient puts the label under 4.5:1 at the dark end.
+- **Card**: a translucent pane — `white/6%` to `white/2%` gradient over `backdrop-filter: blur(24px)`, a `white/9%` border, 12px radius, and an inset top highlight under a soft drop shadow. On hover the border turns violet at 40% and a violet wash fades in; on press the card scales to 0.99. The leading card carries a violet edge and a magenta glow instead of the hover wash.
+- **Filled button**: violet→purple gradient (`#B26BFF → #9E46FF → #7928CA`) under a white half-height sheen, 12px radius, a 28px violet halo, **white label with a drop shadow**, and a lighter gradient plus a wider halo on hover; presses scale to 0.99. White on the violet end measures 4.0:1 — the one documented exception to the text floor, carried by the shadow and the 17px semibold weight.
 - **Badge**: pill, 11px uppercase, `rgb(255 255 255 / 4%)` on a `rgba(255,255,255,0.05)` border, used for group counts ("4 prontas"). A square-cornered violet variant exists for a status tag, and is not yet used because v1 has no notion of an active Routine.
 - **Screen title**: gradient-clipped white to 72% white, matching the V2 header.
 
